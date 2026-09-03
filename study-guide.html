@@ -1,0 +1,827 @@
+<title>멀티 에이전트 노선도</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;900&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F5F8;
+    --bg-elevated:#FFFFFF;
+    --bg-elevated-2:#EBEDF2;
+    --ink:#1B1E29;
+    --ink-soft:#565C70;
+    --ink-faint:#8A90A3;
+    --rail:#CBCFD9;
+    --rail-soft:#E3E5EC;
+    --border: rgba(27,30,41,0.11);
+    --line-network:#0C7A7A;
+    --line-supervisor:#B4650A;
+    --line-hierarchy:#5B3FC4;
+    --accent: var(--line-supervisor);
+    --shadow: 0 1px 2px rgba(20,22,30,0.04), 0 8px 24px -12px rgba(20,22,30,0.16);
+    --font-display:'Gothic A1','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    --font-body:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    --font-mono:'IBM Plex Mono','D2Coding',ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#13151D;
+      --bg-elevated:#1B1E29;
+      --bg-elevated-2:#232733;
+      --ink:#E7E9F2;
+      --ink-soft:#AEB3C4;
+      --ink-faint:#7C8296;
+      --rail:#3B404F;
+      --rail-soft:#282C39;
+      --border: rgba(231,233,242,0.13);
+      --line-network:#4CD9CE;
+      --line-supervisor:#F2A94A;
+      --line-hierarchy:#B7A0FC;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -14px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#13151D;
+    --bg-elevated:#1B1E29;
+    --bg-elevated-2:#232733;
+    --ink:#E7E9F2;
+    --ink-soft:#AEB3C4;
+    --ink-faint:#7C8296;
+    --rail:#3B404F;
+    --rail-soft:#282C39;
+    --border: rgba(231,233,242,0.13);
+    --line-network:#4CD9CE;
+    --line-supervisor:#F2A94A;
+    --line-hierarchy:#B7A0FC;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -14px rgba(0,0,0,0.6);
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle, var(--rail-soft) 1px, transparent 1.4px) 0 0/24px 24px,
+      var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:16px;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{ font-family:var(--font-display); text-wrap:balance; margin:0; }
+  p{ margin:0; }
+  a{ color:inherit; }
+  ::selection{ background:var(--line-supervisor); color:#1B1E29; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:4px; }
+
+  .wrap{ max-width:840px; margin:0 auto; padding:0 20px 96px; }
+
+  /* header */
+  header.hero{ padding:64px 0 40px; }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.12em;
+    color:var(--ink-faint); text-transform:uppercase;
+    margin-bottom:18px;
+  }
+  .eyebrow::before{ content:""; width:16px; height:2px; background:var(--line-supervisor); display:inline-block; }
+  h1{ font-weight:900; font-size:clamp(2rem, 3.6vw + 1rem, 3rem); color:var(--ink); letter-spacing:-0.01em; }
+  .lede{ margin-top:16px; max-width:56ch; color:var(--ink-soft); font-size:1.05rem; }
+
+  /* legend nav */
+  nav.legend{
+    display:flex; flex-wrap:wrap; gap:10px;
+    margin-top:32px;
+  }
+  nav.legend a{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--bg-elevated); border:1px solid var(--border);
+    border-radius:999px; padding:8px 14px 8px 10px;
+    font-size:0.85rem; font-weight:500; text-decoration:none; color:var(--ink);
+    box-shadow:var(--shadow);
+  }
+  .dot{ width:10px; height:10px; border-radius:50%; flex:none; }
+  .dot.network{ background:var(--line-network); }
+  .dot.supervisor{ background:var(--line-supervisor); }
+  .dot.hierarchy{ background:var(--line-hierarchy); }
+  .dot.custom{ background:transparent; border:2px dashed var(--ink-faint); width:8px; height:8px; }
+
+  /* section titles */
+  .section-head{ margin:72px 0 20px; }
+  .section-head .kicker{
+    font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.1em;
+    color:var(--ink-faint); text-transform:uppercase; margin-bottom:6px;
+  }
+  .section-head h2{ font-size:1.4rem; font-weight:700; }
+
+  /* panel (intro / transfer guide) */
+  .panel{
+    background:var(--bg-elevated); border:1px solid var(--border);
+    border-radius:16px; padding:28px 28px 26px; box-shadow:var(--shadow);
+  }
+  .panel h3{ font-size:1.05rem; font-weight:700; margin-bottom:14px; }
+  .transfer-list{ list-style:none; margin:0; padding:0; display:grid; gap:0; }
+  .transfer-list li{
+    display:grid; grid-template-columns:1fr 20px 1fr;
+    align-items:center; gap:10px;
+    padding:12px 0; border-top:1px solid var(--rail-soft);
+    font-size:0.94rem;
+  }
+  .transfer-list li:first-child{ border-top:none; }
+  .transfer-list .term{ font-weight:600; color:var(--ink); }
+  .transfer-list .term small{ display:block; font-weight:400; color:var(--ink-faint); font-size:0.78rem; margin-top:2px; font-family:var(--font-mono); }
+  .transfer-list .arrow{ color:var(--ink-faint); text-align:center; }
+  .transfer-list .meaning{ color:var(--ink-soft); }
+
+  /* line card */
+  .line-card{
+    background:var(--bg-elevated); border:1px solid var(--border);
+    border-radius:18px; padding:30px 30px 32px; box-shadow:var(--shadow);
+    scroll-margin-top:24px;
+  }
+  .line-card .badge-row{ display:flex; align-items:center; gap:12px; margin-bottom:6px; }
+  .badge{
+    width:34px; height:34px; border-radius:50%; flex:none;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono); font-weight:600; font-size:0.85rem; color:#fff;
+  }
+  .badge.network{ background:var(--line-network); }
+  .badge.supervisor{ background:var(--line-supervisor); }
+  .badge.hierarchy{ background:var(--line-hierarchy); }
+  .badge.custom{ background:transparent; border:2px dashed var(--ink-faint); color:var(--ink-faint); }
+  .line-card h3{ font-size:1.3rem; font-weight:700; }
+  .line-card .en{ font-family:var(--font-mono); font-size:0.78rem; color:var(--ink-faint); letter-spacing:0.04em; }
+  .line-card .one-liner{ margin:12px 0 22px; color:var(--ink-soft); max-width:58ch; }
+
+  .diagram-wrap{ overflow-x:auto; margin:0 -4px 24px; }
+  .diagram-wrap svg{ width:100%; height:auto; min-width:420px; display:block; }
+  .diagram-wrap text{ font-family:var(--font-body); fill:var(--ink); }
+  .diagram-wrap text.station-label{ font-size:13px; font-weight:600; }
+  .diagram-wrap text.station-code{ font-family:var(--font-mono); font-size:14px; font-weight:600; fill:var(--bg-elevated); }
+  .diagram-wrap text.note{ font-size:12px; fill:var(--ink-faint); }
+
+  dl.detail-grid{
+    display:grid; grid-template-columns:130px 1fr; gap:0;
+    margin:0; border-top:1px solid var(--rail-soft);
+  }
+  dl.detail-grid > div{ display:contents; }
+  dl.detail-grid dt{
+    padding:13px 16px 13px 0; font-weight:700; font-size:0.86rem;
+    border-bottom:1px solid var(--rail-soft);
+  }
+  dl.detail-grid dd{
+    margin:0; padding:13px 0; color:var(--ink-soft); font-size:0.93rem;
+    border-bottom:1px solid var(--rail-soft);
+  }
+  .line-card.network dt{ color:var(--line-network); }
+  .line-card.supervisor dt{ color:var(--line-supervisor); }
+  .line-card.hierarchy dt{ color:var(--line-hierarchy); }
+  .line-card.custom dt{ color:var(--ink-faint); }
+
+  .example-stop{
+    margin-top:20px; display:flex; gap:12px; align-items:flex-start;
+    background:var(--bg-elevated-2); border-radius:12px; padding:14px 16px;
+  }
+  .example-stop .tag{
+    font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.06em;
+    color:var(--ink-faint); text-transform:uppercase; white-space:nowrap; padding-top:2px;
+  }
+  .example-stop p{ font-size:0.9rem; color:var(--ink-soft); }
+  .example-stop code{ font-family:var(--font-mono); background:var(--rail-soft); padding:1px 5px; border-radius:4px; font-size:0.85em; color:var(--ink); }
+
+  .stack{ display:grid; gap:22px; }
+
+  /* comparison table */
+  .table-wrap{ overflow-x:auto; background:var(--bg-elevated); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow); }
+  table.compare{ width:100%; border-collapse:collapse; min-width:640px; font-size:0.9rem; }
+  table.compare th, table.compare td{ text-align:left; padding:14px 18px; border-bottom:1px solid var(--rail-soft); vertical-align:top; }
+  table.compare thead th{
+    font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--ink-faint); font-weight:600; background:var(--bg-elevated-2);
+  }
+  table.compare tbody tr:last-child td{ border-bottom:none; }
+  table.compare td.line-name{ font-weight:700; white-space:nowrap; }
+  table.compare td.line-name .dot{ margin-right:8px; vertical-align:middle; }
+  table.compare td:not(.line-name){ color:var(--ink-soft); }
+
+  /* checkpoint */
+  .signboard{
+    border-top:4px solid var(--line-supervisor);
+    background:var(--bg-elevated-2); border-radius:0 0 16px 16px;
+    padding:26px 28px 28px;
+  }
+  .signboard .kicker{ font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.1em; color:var(--line-supervisor); text-transform:uppercase; margin-bottom:10px; font-weight:600; }
+  .signboard h3{ font-size:1.1rem; margin-bottom:12px; }
+  .signboard p{ color:var(--ink-soft); font-size:0.95rem; }
+  .signboard strong{ color:var(--ink); }
+
+  footer{ margin-top:80px; padding-top:24px; border-top:1px solid var(--rail-soft); color:var(--ink-faint); font-size:0.82rem; display:flex; flex-wrap:wrap; gap:8px 20px; justify-content:space-between; }
+  footer .mono{ font-family:var(--font-mono); }
+
+  .train-dot{ filter: drop-shadow(0 0 3px var(--line-network)); }
+  @media (prefers-reduced-motion: reduce){
+    .train-dot{ display:none; }
+  }
+
+  /* journey map */
+  .journey-wrap{ overflow-x:auto; margin:0 -4px; }
+  .journey-wrap svg{ width:100%; height:auto; min-width:640px; display:block; }
+  .journey-wrap text{ font-family:var(--font-body); fill:var(--ink); }
+  .journey-wrap text.code{ font-family:var(--font-mono); font-weight:700; font-size:12px; fill:var(--ink-faint); }
+  .journey-wrap text.code.done{ fill:var(--ink); }
+  .journey-wrap text.code.now{ fill:var(--accent); }
+  .journey-wrap text.title{ font-size:13px; font-weight:600; }
+  .pulse-ring{ fill:none; stroke-width:3; transform-origin:center; transform-box:fill-box; animation:pulse 2.2s ease-out infinite; }
+  @keyframes pulse{ 0%{ transform:scale(1); opacity:.65; } 100%{ transform:scale(2.1); opacity:0; } }
+  @media (prefers-reduced-motion: reduce){
+    .pulse-ring{ animation:none; opacity:.45; }
+  }
+  .journey-legend{ display:flex; flex-wrap:wrap; gap:18px; margin-top:14px; font-size:0.82rem; color:var(--ink-soft); }
+  .journey-legend span{ display:inline-flex; align-items:center; gap:7px; }
+  .legend-mark{ width:12px; height:12px; border-radius:50%; display:inline-block; flex:none; }
+  .legend-mark.done{ background:var(--ink); }
+  .legend-mark.now{ border:3px solid var(--accent); background:var(--bg-elevated); }
+  .legend-mark.next{ border:2px solid var(--rail); background:var(--bg-elevated); }
+
+  /* status badge */
+  .status{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.06em; text-transform:uppercase;
+    padding:4px 10px; border-radius:999px; font-weight:600;
+  }
+  .status.done{ background:var(--bg-elevated-2); color:var(--ink-soft); }
+  .status.done::before{ content:"●"; color:var(--ink); font-size:0.6rem; }
+  .status.todo{ background:var(--bg-elevated-2); color:var(--ink-faint); }
+  .status.todo::before{ content:"○"; font-size:0.6rem; }
+  .status.pending{ background:var(--bg-elevated-2); color:var(--accent); }
+  .status.pending::before{ content:"◐"; font-size:0.6rem; }
+
+  /* phase0 checklist */
+  .check-list{ list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+  .check-list li{ display:flex; gap:10px; align-items:flex-start; font-size:0.93rem; }
+  .check-list .mark{ flex:none; width:20px; height:20px; border-radius:6px; display:flex; align-items:center; justify-content:center; margin-top:1px; font-size:0.75rem; }
+  .check-list .mark.on{ background:var(--ink); color:var(--bg-elevated); }
+  .check-list .mark.off{ border:1.5px solid var(--rail); color:transparent; }
+  .check-list .body b{ color:var(--ink); }
+  .check-list .body span.note{ display:block; color:var(--ink-faint); font-size:0.82rem; margin-top:2px; }
+
+  /* preview grid (phase 2-6) */
+  .preview-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+  .preview-card{
+    background:var(--bg-elevated); border:1px solid var(--border); border-radius:14px;
+    padding:20px 22px 22px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:10px;
+  }
+  .preview-card .top-row{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .preview-card .ptag{ font-family:var(--font-mono); font-size:0.72rem; color:var(--ink-faint); }
+  .preview-card h4{ font-family:var(--font-display); font-size:1.05rem; font-weight:700; margin:0; }
+  .preview-card .pattern-tag{
+    align-self:flex-start; font-size:0.72rem; font-weight:600; color:var(--line-hierarchy);
+    background:var(--bg-elevated-2); padding:3px 9px; border-radius:6px;
+  }
+  .preview-card ul{ margin:2px 0 0; padding-left:18px; color:var(--ink-soft); font-size:0.86rem; display:grid; gap:4px; }
+  .preview-card .cp{ font-size:0.82rem; color:var(--ink-faint); border-top:1px solid var(--rail-soft); padding-top:10px; margin-top:2px; }
+  .preview-card .cp b{ color:var(--ink-soft); font-weight:600; }
+  .preview-card.wide{ grid-column:1 / -1; }
+
+  @media (max-width:640px){
+    .preview-grid{ grid-template-columns:1fr; }
+  }
+
+  @media (max-width:560px){
+    dl.detail-grid{ grid-template-columns:1fr; }
+    dl.detail-grid dt{ padding-bottom:2px; border-bottom:none; }
+    dl.detail-grid dd{ padding-top:0; }
+    .transfer-list li{ grid-template-columns:1fr 16px 1fr; font-size:0.86rem; }
+    header.hero{ padding-top:44px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Phase 0 – 6 전체 정리 · 만들면서 배우는 AI 에이전트 개발</div>
+    <h1>멀티 에이전트 노선도</h1>
+    <p class="lede">LangGraph 멀티 에이전트를 지하철 노선도로 바꿔보면 이해가 쉬워진다. 정거장은 에이전트, 선로는 핸드오프 경로, 환승역은 슈퍼바이저다. 결국 모든 패턴의 차이는 딱 하나 — <strong>다음 정거장을 누가 정하는가</strong>.</p>
+    <nav class="legend" aria-label="섹션 바로가기">
+      <a href="#journey"><span class="dot" style="background:var(--ink)"></span>전체 여정</a>
+      <a href="#phase0"><span class="dot" style="background:var(--ink-faint)"></span>Phase 0</a>
+      <a href="#network"><span class="dot network"></span>네트워크선</a>
+      <a href="#supervisor"><span class="dot supervisor"></span>슈퍼바이저선</a>
+      <a href="#hierarchy"><span class="dot hierarchy"></span>계층선</a>
+      <a href="#custom"><span class="dot custom"></span>커스텀 연장선</a>
+      <a href="#upcoming"><span class="dot" style="border:2px solid var(--rail);background:transparent"></span>Phase 2–6 예정</a>
+    </nav>
+  </header>
+
+  <section aria-labelledby="journey-h" id="journey">
+    <div class="section-head" style="margin-top:0;">
+      <div class="kicker">Study Roadmap</div>
+      <h2 id="journey-h">학습 여정 노선도 — 지금 위치: Phase 2 다음 정거장</h2>
+    </div>
+    <div class="panel">
+      <div class="journey-wrap">
+        <svg viewBox="0 0 900 140" role="img" aria-label="Phase 0부터 Phase 6까지 7개 정거장이 한 노선에 놓인 다이어그램. Phase 0과 1은 완료, Phase 2는 다음 정거장으로 강조, Phase 3부터 6은 예정 상태.">
+          <line x1="60" y1="70" x2="840" y2="70" style="stroke:var(--rail-soft)" stroke-width="6" stroke-linecap="round"/>
+          <line x1="60" y1="70" x2="190" y2="70" style="stroke:var(--ink)" stroke-width="6" stroke-linecap="round"/>
+          <line x1="190" y1="70" x2="320" y2="70" style="stroke:var(--accent)" stroke-width="6" stroke-linecap="round" stroke-dasharray="1 9"/>
+
+          <!-- P0 done -->
+          <circle cx="60" cy="70" r="15" style="fill:var(--ink)"/>
+          <path d="M53,70 L58,76 L68,63" style="stroke:var(--bg-elevated)" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <text class="code done" x="60" y="104" text-anchor="middle">P0</text>
+          <text class="title" x="60" y="120" text-anchor="middle">사전 준비</text>
+
+          <!-- P1 done -->
+          <circle cx="190" cy="70" r="15" style="fill:var(--ink)"/>
+          <path d="M183,70 L188,76 L198,63" style="stroke:var(--bg-elevated)" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <text class="code done" x="190" y="24" text-anchor="middle">P1</text>
+          <text class="title" x="190" y="40" text-anchor="middle">이론</text>
+
+          <!-- P2 current -->
+          <circle class="pulse-ring" cx="320" cy="70" r="15"/>
+          <circle cx="320" cy="70" r="15" style="fill:var(--bg-elevated);stroke:var(--accent)" stroke-width="3.5"/>
+          <text class="code now" x="320" y="104" text-anchor="middle">P2</text>
+          <text class="title" x="320" y="120" text-anchor="middle">핸드오프</text>
+
+          <!-- P3-P6 upcoming -->
+          <circle cx="450" cy="70" r="14" style="fill:var(--bg-elevated);stroke:var(--rail)" stroke-width="2.5"/>
+          <text class="code" x="450" y="24" text-anchor="middle">P3</text>
+          <text class="title" x="450" y="40" text-anchor="middle">네트워크</text>
+
+          <circle cx="580" cy="70" r="14" style="fill:var(--bg-elevated);stroke:var(--rail)" stroke-width="2.5"/>
+          <text class="code" x="580" y="104" text-anchor="middle">P4</text>
+          <text class="title" x="580" y="120" text-anchor="middle">슈퍼바이저</text>
+
+          <circle cx="710" cy="70" r="14" style="fill:var(--bg-elevated);stroke:var(--rail)" stroke-width="2.5"/>
+          <text class="code" x="710" y="24" text-anchor="middle">P5</text>
+          <text class="title" x="710" y="40" text-anchor="middle">3중 라우팅</text>
+
+          <circle cx="840" cy="70" r="14" style="fill:var(--bg-elevated);stroke:var(--rail)" stroke-width="2.5"/>
+          <text class="code" x="840" y="104" text-anchor="middle">P6</text>
+          <text class="title" x="840" y="120" text-anchor="middle">플래닝</text>
+        </svg>
+      </div>
+      <div class="journey-legend">
+        <span><span class="legend-mark done"></span>완료</span>
+        <span><span class="legend-mark now"></span>다음 정거장 (진행 예정)</span>
+        <span><span class="legend-mark next"></span>미개통 (예정)</span>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="guide-h">
+    <div class="section-head">
+      <div class="kicker">Transfer Guide</div>
+      <h2 id="guide-h">환승 안내 — 용어 대응표</h2>
+    </div>
+    <div class="panel">
+      <h3>노선도 용어 ↔ LangGraph 용어</h3>
+      <ul class="transfer-list">
+        <li>
+          <span class="term">정거장<small>STATION</small></span>
+          <span class="arrow">=</span>
+          <span class="meaning">에이전트(Agent) — 그래프의 노드 하나</span>
+        </li>
+        <li>
+          <span class="term">선로 / 노선<small>RAIL / LINE</small></span>
+          <span class="arrow">=</span>
+          <span class="meaning">핸드오프 경로 — 노드 사이의 엣지</span>
+        </li>
+        <li>
+          <span class="term">환승<small>TRANSFER</small></span>
+          <span class="arrow">=</span>
+          <span class="meaning"><code style="font-family:var(--font-mono);background:var(--rail-soft);padding:1px 5px;border-radius:4px;">Command</code>로 다음 노드 + 상태 업데이트 지정</span>
+        </li>
+        <li>
+          <span class="term">환승역 / 허브<small>HUB</small></span>
+          <span class="arrow">=</span>
+          <span class="meaning">슈퍼바이저 — 하위 에이전트를 도구처럼 호출</span>
+        </li>
+        <li>
+          <span class="term">종착역<small>TERMINUS</small></span>
+          <span class="arrow">=</span>
+          <span class="meaning">최종 응답이 사용자에게 반환되는 지점</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="phase0-h" id="phase0">
+    <div class="section-head">
+      <div class="kicker">Phase 0</div>
+      <h2 id="phase0-h">출발역 — 사전 준비 <span class="status done" style="margin-left:8px;">환경 구축 완료</span></h2>
+    </div>
+    <div class="panel">
+      <h3 style="margin-bottom:16px;">7장은 4~6장의 개발 환경을 전제로 한다. 체크만 하고 넘어가는 정거장.</h3>
+      <ul class="check-list">
+        <li>
+          <span class="mark on">✓</span>
+          <span class="body"><b>Python 가상환경 + 패키지 설치</b> — <code style="font-family:var(--font-mono);background:var(--rail-soft);padding:1px 5px;border-radius:4px;">langgraph</code> <code style="font-family:var(--font-mono);background:var(--rail-soft);padding:1px 5px;border-radius:4px;">langchain-openai</code> <code style="font-family:var(--font-mono);background:var(--rail-soft);padding:1px 5px;border-radius:4px;">langchain-tavily</code> <code style="font-family:var(--font-mono);background:var(--rail-soft);padding:1px 5px;border-radius:4px;">python-dotenv</code>
+            <span class="note">.venv 생성 및 설치 완료 (langgraph 1.2.11)</span></span>
+        </li>
+        <li>
+          <span class="mark off"></span>
+          <span class="body"><b>.env에 API 키 설정</b> — <code style="font-family:var(--font-mono);background:var(--rail-soft);padding:1px 5px;border-radius:4px;">OPENAI_API_KEY</code>, <code style="font-family:var(--font-mono);background:var(--rail-soft);padding:1px 5px;border-radius:4px;">TAVILY_API_KEY</code>
+            <span class="note">.env.example만 생성됨 — 실제 키 값은 직접 채워야 함</span></span>
+        </li>
+        <li>
+          <span class="mark on">✓</span>
+          <span class="body"><b>StateGraph / Node / Edge / 조건부 엣지 기본 개념</b>
+            <span class="note">Phase 1에서 핸드오프 개념과 함께 정리</span></span>
+        </li>
+        <li>
+          <span class="mark off"></span>
+          <span class="body"><b>도구 호출(tool calling) 기반 에이전트 경험</b>
+            <span class="note">없어도 무방 — Phase 3 진행 중 자연스럽게 익히게 됨</span></span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section aria-labelledby="lines-h">
+    <div class="section-head">
+      <div class="kicker">7.1.1 – 7.1.4 · Phase 1 상세 노선도</div>
+      <h2 id="lines-h">4개 노선 비교</h2>
+    </div>
+
+    <div class="stack">
+
+      <!-- NETWORK -->
+      <article class="line-card network" id="network">
+        <div class="badge-row">
+          <div class="badge network">N</div>
+          <div>
+            <h3>네트워크선</h3>
+            <div class="en">NETWORK PATTERN</div>
+          </div>
+        </div>
+        <p class="one-liner">중앙 관제소 없이 정거장끼리 서로 직접 연결된 노선. 각 역이 스스로 "다음 역은 여기"라고 판단해 환승시킨다.</p>
+
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 560 260" role="img" aria-label="에이전트 A, B, C가 서로 직접 연결된 삼각형 네트워크 다이어그램">
+            <defs>
+              <marker id="arrow-network" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" style="fill:var(--line-network)"/>
+              </marker>
+            </defs>
+            <line x1="146" y1="100" x2="414" y2="100" style="stroke:var(--line-network)" stroke-width="3" marker-start="url(#arrow-network)" marker-end="url(#arrow-network)"/>
+            <line x1="141" y1="115" x2="259" y2="195" style="stroke:var(--line-network)" stroke-width="3" marker-start="url(#arrow-network)" marker-end="url(#arrow-network)"/>
+            <line x1="419" y1="115" x2="301" y2="195" style="stroke:var(--line-network)" stroke-width="3" marker-start="url(#arrow-network)" marker-end="url(#arrow-network)"/>
+
+            <circle class="train-dot" r="5" style="fill:var(--line-network)">
+              <animateMotion dur="6s" repeatCount="indefinite" path="M146,100 L414,100 L301,195 L259,195 L141,115 L146,100"/>
+            </circle>
+
+            <circle cx="120" cy="100" r="22" style="fill:var(--bg-elevated);stroke:var(--line-network)" stroke-width="3"/>
+            <text class="station-code" x="120" y="105" text-anchor="middle">A</text>
+            <text class="station-label" x="120" y="142" text-anchor="middle">검색 에이전트</text>
+
+            <circle cx="440" cy="100" r="22" style="fill:var(--bg-elevated);stroke:var(--line-network)" stroke-width="3"/>
+            <text class="station-code" x="440" y="105" text-anchor="middle">B</text>
+            <text class="station-label" x="440" y="142" text-anchor="middle">차트 에이전트</text>
+
+            <circle cx="280" cy="210" r="22" style="fill:var(--bg-elevated);stroke:var(--line-network)" stroke-width="3"/>
+            <text class="station-code" x="280" y="215" text-anchor="middle">C</text>
+            <text class="station-label" x="280" y="252" text-anchor="middle">에이전트 C</text>
+          </svg>
+        </div>
+
+        <dl class="detail-grid">
+          <div><dt>라우팅 결정자</dt><dd>각 에이전트 스스로. 처리 중 "이 다음은 저 역이 낫겠다" 싶으면 <span style="font-family:var(--font-mono)">Command</span>로 직접 넘긴다.</dd></div>
+          <div><dt>통신 구조</dt><dd>중앙 조율자 없이 P2P로 직접 핸드오프. 그래프의 모든 노드가 서로에게 엣지를 가질 수 있다.</dd></div>
+          <div><dt>장점</dt><dd>구조가 유연하고 특정 지점의 병목이 없다.</dd></div>
+          <div><dt>단점</dt><dd>에이전트가 늘어날수록 "누가 누구를 호출할 수 있는지" 관계가 복잡해져 디버깅이 어려워진다.</dd></div>
+        </dl>
+
+        <div class="example-stop">
+          <span class="tag">Phase 3</span>
+          <p>정보 검색 에이전트가 검색을 마치면 스스로 판단해 차트 생성 에이전트로 핸드오프하는 실습으로 이 노선을 직접 만든다.</p>
+        </div>
+      </article>
+
+      <!-- SUPERVISOR -->
+      <article class="line-card supervisor" id="supervisor">
+        <div class="badge-row">
+          <div class="badge supervisor">S</div>
+          <div>
+            <h3>슈퍼바이저선</h3>
+            <div class="en">SUPERVISOR PATTERN</div>
+          </div>
+        </div>
+        <p class="one-liner">모든 노선이 환승역 하나를 거쳐야 한다. 하위 에이전트는 슈퍼바이저에게 도구처럼 호출되고, 결과도 항상 슈퍼바이저를 거쳐 돌아간다.</p>
+
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 560 260" role="img" aria-label="슈퍼바이저가 중앙에 있고 에이전트 A, B, C가 방사형으로 연결된 다이어그램">
+            <defs>
+              <marker id="arrow-supervisor" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" style="fill:var(--line-supervisor)"/>
+              </marker>
+            </defs>
+            <line x1="259.5" y1="76" x2="120.5" y2="184" style="stroke:var(--line-supervisor)" stroke-width="3" marker-start="url(#arrow-supervisor)" marker-end="url(#arrow-supervisor)"/>
+            <line x1="280" y1="86" x2="280" y2="174" style="stroke:var(--line-supervisor)" stroke-width="3" marker-start="url(#arrow-supervisor)" marker-end="url(#arrow-supervisor)"/>
+            <line x1="300.5" y1="76" x2="439.5" y2="184" style="stroke:var(--line-supervisor)" stroke-width="3" marker-start="url(#arrow-supervisor)" marker-end="url(#arrow-supervisor)"/>
+
+            <circle cx="280" cy="60" r="24" style="fill:var(--bg-elevated);stroke:var(--line-supervisor)" stroke-width="3.5"/>
+            <text class="station-code" x="280" y="65" text-anchor="middle">S</text>
+            <text class="station-label" x="280" y="22" text-anchor="middle">슈퍼바이저</text>
+
+            <circle cx="100" cy="200" r="22" style="fill:var(--bg-elevated);stroke:var(--line-supervisor)" stroke-width="3"/>
+            <text class="station-code" x="100" y="205" text-anchor="middle">A</text>
+            <text class="station-label" x="100" y="242" text-anchor="middle">웹 분석</text>
+
+            <circle cx="280" cy="200" r="22" style="fill:var(--bg-elevated);stroke:var(--line-supervisor)" stroke-width="3"/>
+            <text class="station-code" x="280" y="205" text-anchor="middle">B</text>
+            <text class="station-label" x="280" y="242" text-anchor="middle">DB 관리</text>
+
+            <circle cx="460" cy="200" r="22" style="fill:var(--bg-elevated);stroke:var(--line-supervisor)" stroke-width="3"/>
+            <text class="station-code" x="460" y="205" text-anchor="middle">C</text>
+            <text class="station-label" x="460" y="242" text-anchor="middle">FAQ 응답</text>
+          </svg>
+        </div>
+
+        <dl class="detail-grid">
+          <div><dt>라우팅 결정자</dt><dd>슈퍼바이저 하나. 하위 에이전트는 도구(tool)처럼 호출당할 뿐 스스로 라우팅하지 않는다.</dd></div>
+          <div><dt>통신 구조</dt><dd>하위 에이전트끼리는 서로 모른다. 결과는 항상 슈퍼바이저를 거쳐 오간다(hub-and-spoke).</dd></div>
+          <div><dt>장점</dt><dd>라우팅 로직이 한 곳에 모여 있어 구조가 명확하고 확장·디버깅이 쉽다.</dd></div>
+          <div><dt>단점</dt><dd>슈퍼바이저가 병목이 될 수 있고, 하위 에이전트끼리 직접 협업이 필요하면 비효율적이다.</dd></div>
+        </dl>
+
+        <div class="example-stop">
+          <span class="tag">Phase 4·5</span>
+          <p>웹 분석 → DB 관리를 순차 위임하거나, 최신 검색·내부 DB·FAQ 3개 에이전트 중 질문 유형에 맞는 곳으로 라우팅한다.</p>
+        </div>
+      </article>
+
+      <!-- HIERARCHY -->
+      <article class="line-card hierarchy" id="hierarchy">
+        <div class="badge-row">
+          <div class="badge hierarchy">H</div>
+          <div>
+            <h3>계층선</h3>
+            <div class="en">HIERARCHICAL PATTERN</div>
+          </div>
+        </div>
+        <p class="one-liner">슈퍼바이저선을 여러 단으로 쌓은 본선-지선 구조. 총괄역은 팀 단위로만 위임하고, 팀 허브가 다시 세부 정거장에 위임한다.</p>
+
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 560 310" role="img" aria-label="총괄 슈퍼바이저 아래 두 팀 허브, 각 팀 허브 아래 두 개의 세부 에이전트가 있는 트리 다이어그램">
+            <defs>
+              <marker id="arrow-hierarchy" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" style="fill:var(--line-hierarchy)"/>
+              </marker>
+            </defs>
+            <line x1="259" y1="66" x2="171" y2="134" style="stroke:var(--line-hierarchy)" stroke-width="3" marker-end="url(#arrow-hierarchy)"/>
+            <line x1="301" y1="66" x2="389" y2="134" style="stroke:var(--line-hierarchy)" stroke-width="3" marker-end="url(#arrow-hierarchy)"/>
+            <line x1="135" y1="171" x2="85" y2="239" style="stroke:var(--line-hierarchy)" stroke-width="2.5" marker-end="url(#arrow-hierarchy)"/>
+            <line x1="165" y1="171" x2="215" y2="239" style="stroke:var(--line-hierarchy)" stroke-width="2.5" marker-end="url(#arrow-hierarchy)"/>
+            <line x1="395" y1="171" x2="345" y2="239" style="stroke:var(--line-hierarchy)" stroke-width="2.5" marker-end="url(#arrow-hierarchy)"/>
+            <line x1="425" y1="171" x2="475" y2="239" style="stroke:var(--line-hierarchy)" stroke-width="2.5" marker-end="url(#arrow-hierarchy)"/>
+
+            <circle cx="280" cy="50" r="22" style="fill:var(--bg-elevated);stroke:var(--line-hierarchy)" stroke-width="3.5"/>
+            <text class="station-code" x="280" y="55" text-anchor="middle">P</text>
+            <text class="station-label" x="280" y="90" text-anchor="middle">Planner·총괄</text>
+
+            <circle cx="150" cy="150" r="20" style="fill:var(--bg-elevated);stroke:var(--line-hierarchy)" stroke-width="3"/>
+            <text class="station-code" x="150" y="155" text-anchor="middle" style="font-size:12px">팀A</text>
+            <text class="station-label" x="150" y="189" text-anchor="middle">조사 슈퍼바이저</text>
+
+            <circle cx="410" cy="150" r="20" style="fill:var(--bg-elevated);stroke:var(--line-hierarchy)" stroke-width="3"/>
+            <text class="station-code" x="410" y="155" text-anchor="middle" style="font-size:12px">팀B</text>
+            <text class="station-label" x="410" y="189" text-anchor="middle">작성 슈퍼바이저</text>
+
+            <circle cx="70" cy="260" r="18" style="fill:var(--bg-elevated);stroke:var(--line-hierarchy)" stroke-width="2.5"/>
+            <text class="station-code" x="70" y="264" text-anchor="middle" style="font-size:11px">A1</text>
+            <text class="station-label" x="70" y="298" text-anchor="middle" style="font-size:12px">자료 수집</text>
+
+            <circle cx="230" cy="260" r="18" style="fill:var(--bg-elevated);stroke:var(--line-hierarchy)" stroke-width="2.5"/>
+            <text class="station-code" x="230" y="264" text-anchor="middle" style="font-size:11px">A2</text>
+            <text class="station-label" x="230" y="298" text-anchor="middle" style="font-size:12px">자료 검증</text>
+
+            <circle cx="330" cy="260" r="18" style="fill:var(--bg-elevated);stroke:var(--line-hierarchy)" stroke-width="2.5"/>
+            <text class="station-code" x="330" y="264" text-anchor="middle" style="font-size:11px">B1</text>
+            <text class="station-label" x="330" y="298" text-anchor="middle" style="font-size:12px">초안 작성</text>
+
+            <circle cx="490" cy="260" r="18" style="fill:var(--bg-elevated);stroke:var(--line-hierarchy)" stroke-width="2.5"/>
+            <text class="station-code" x="490" y="264" text-anchor="middle" style="font-size:11px">B2</text>
+            <text class="station-label" x="490" y="298" text-anchor="middle" style="font-size:12px">보고서 정리</text>
+          </svg>
+        </div>
+
+        <dl class="detail-grid">
+          <div><dt>라우팅 결정자</dt><dd>여러 단의 슈퍼바이저. 최상위는 팀 단위로만 위임하고, 팀 허브가 세부 위임을 다시 결정한다.</dd></div>
+          <div><dt>통신 구조</dt><dd>슈퍼바이저 패턴을 재귀적으로 쌓은 구조. 각 계층은 자기 하위 계층만 알면 된다.</dd></div>
+          <div><dt>장점</dt><dd>에이전트 수가 아주 많아져도 슈퍼바이저 한 명이 전부 알 필요가 없어 관심사가 분리된다.</dd></div>
+          <div><dt>단점</dt><dd>요청이 여러 계층을 거치며 지연(latency)이 늘어나고 구조가 복잡해진다.</dd></div>
+        </dl>
+
+        <div class="example-stop">
+          <span class="tag">Phase 6</span>
+          <p>Planner가 작업 계획을 세우면 슈퍼바이저가 그 계획대로 조사 에이전트 → 작성 에이전트를 순차·반복 호출해 보고서를 완성한다.</p>
+        </div>
+      </article>
+
+      <!-- CUSTOM -->
+      <article class="line-card custom" id="custom">
+        <div class="badge-row">
+          <div class="badge custom">＋</div>
+          <div>
+            <h3>커스텀 연장선</h3>
+            <div class="en">CUSTOM PATTERN</div>
+          </div>
+        </div>
+        <p class="one-liner">아직 정식 개통 전인 임시 연장선. 슈퍼바이저선은 유지한 채, 필요한 두 정거장만 예외적으로 직접 잇는다.</p>
+
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 560 320" role="img" aria-label="슈퍼바이저 구조에 A와 C를 직접 잇는 점선 연장선이 추가된 다이어그램">
+            <defs>
+              <marker id="arrow-supervisor-2" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" style="fill:var(--line-supervisor)"/>
+              </marker>
+              <marker id="arrow-custom" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" style="fill:var(--ink-faint)"/>
+              </marker>
+            </defs>
+
+            <path d="M100,222 Q280,290 460,222" style="stroke:var(--ink-faint)" stroke-width="2.5" fill="none" stroke-dasharray="2 7" stroke-linecap="round" marker-start="url(#arrow-custom)" marker-end="url(#arrow-custom)"/>
+            <text class="note" x="280" y="300" text-anchor="middle">임시 연장선 — A ↔ C 직접 핸드오프</text>
+
+            <line x1="259.5" y1="76" x2="120.5" y2="184" style="stroke:var(--line-supervisor)" stroke-width="3" marker-start="url(#arrow-supervisor-2)" marker-end="url(#arrow-supervisor-2)"/>
+            <line x1="280" y1="86" x2="280" y2="174" style="stroke:var(--line-supervisor)" stroke-width="3" marker-start="url(#arrow-supervisor-2)" marker-end="url(#arrow-supervisor-2)"/>
+            <line x1="300.5" y1="76" x2="439.5" y2="184" style="stroke:var(--line-supervisor)" stroke-width="3" marker-start="url(#arrow-supervisor-2)" marker-end="url(#arrow-supervisor-2)"/>
+
+            <circle cx="280" cy="60" r="24" style="fill:var(--bg-elevated);stroke:var(--line-supervisor)" stroke-width="3.5"/>
+            <text class="station-code" x="280" y="65" text-anchor="middle">S</text>
+            <text class="station-label" x="280" y="22" text-anchor="middle">슈퍼바이저</text>
+
+            <circle cx="100" cy="200" r="22" style="fill:var(--bg-elevated);stroke:var(--line-supervisor)" stroke-width="3"/>
+            <text class="station-code" x="100" y="205" text-anchor="middle">A</text>
+            <text class="station-label" x="100" y="242" text-anchor="middle">에이전트 A</text>
+
+            <circle cx="280" cy="200" r="22" style="fill:var(--bg-elevated);stroke:var(--line-supervisor)" stroke-width="3"/>
+            <text class="station-code" x="280" y="205" text-anchor="middle">B</text>
+            <text class="station-label" x="280" y="242" text-anchor="middle">에이전트 B</text>
+
+            <circle cx="460" cy="200" r="22" style="fill:var(--bg-elevated);stroke:var(--line-supervisor)" stroke-width="3"/>
+            <text class="station-code" x="460" y="205" text-anchor="middle">C</text>
+            <text class="station-label" x="460" y="242" text-anchor="middle">에이전트 C</text>
+          </svg>
+        </div>
+
+        <dl class="detail-grid">
+          <div><dt>라우팅 결정자</dt><dd>기본 골격의 결정자(주로 슈퍼바이저)를 유지하되, 특정 구간만 예외 규칙을 추가한다.</dd></div>
+          <div><dt>통신 구조</dt><dd>정형 패턴 3가지를 문제 상황에 맞게 조합·변형. 패턴 이름보다 "라우팅 권한"과 "상태 공유 방식" 설계가 핵심.</dd></div>
+          <div><dt>장점</dt><dd>실무 요구사항이 정형 패턴에 딱 안 맞을 때 필요한 만큼만 유연하게 확장할 수 있다.</dd></div>
+          <div><dt>단점</dt><dd>예외가 늘어날수록 노선도(구조)를 파악하기 어려워질 수 있다.</dd></div>
+        </dl>
+
+        <div class="example-stop">
+          <span class="tag">실무</span>
+          <p>슈퍼바이저 밑 하위 에이전트끼리 네트워크선처럼 직접 핸드오프를 허용하거나, 조건부 엣지로 특정 상황에만 계층을 건너뛰는 식으로 응용한다.</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section aria-labelledby="compare-h">
+    <div class="section-head">
+      <div class="kicker">Route Comparison</div>
+      <h2 id="compare-h">노선 비교표</h2>
+    </div>
+    <div class="table-wrap">
+      <table class="compare">
+        <thead>
+          <tr><th>노선</th><th>결정자</th><th>통신 구조</th><th>적합한 상황</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="line-name"><span class="dot network"></span>네트워크선</td>
+            <td>각 에이전트 스스로</td>
+            <td>서로 직접 핸드오프 (P2P)</td>
+            <td>에이전트 수가 적고 역할 경계가 유동적일 때</td>
+          </tr>
+          <tr>
+            <td class="line-name"><span class="dot supervisor"></span>슈퍼바이저선</td>
+            <td>감독 에이전트 1개</td>
+            <td>하위 에이전트는 도구처럼 호출됨</td>
+            <td>역할이 명확히 나뉘고 중앙 조율이 필요할 때</td>
+          </tr>
+          <tr>
+            <td class="line-name"><span class="dot hierarchy"></span>계층선</td>
+            <td>여러 단의 슈퍼바이저</td>
+            <td>슈퍼바이저의 슈퍼바이저 (재귀적)</td>
+            <td>팀·에이전트 수가 아주 많을 때</td>
+          </tr>
+          <tr>
+            <td class="line-name"><span class="dot custom"></span>커스텀 연장선</td>
+            <td>상황에 따라 혼합</td>
+            <td>정형 패턴을 조합</td>
+            <td>실무 요구사항이 정형 패턴에 안 맞을 때</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="checkpoint-h" style="margin-top:56px;">
+    <div class="table-wrap" style="border-radius:16px;">
+      <div style="padding:20px 28px 0;">
+        <h2 id="checkpoint-h" style="font-size:1.05rem;font-weight:700;">체크포인트 안내판</h2>
+      </div>
+      <div class="signboard" style="margin-top:16px;">
+        <div class="kicker">Self Check</div>
+        <h3>네트워크선과 슈퍼바이저선, 뭐가 다를까?</h3>
+        <p>"정보 검색 후 차트로 보여줘"라는 요청이 들어왔다고 하자. <strong>네트워크선</strong>에서는 검색 에이전트가 결과를 받자마자 <strong>스스로 판단</strong>해서 차트 에이전트로 곧장 환승시킨다. <strong>슈퍼바이저선</strong>에서는 검색 에이전트가 결과를 슈퍼바이저에게 돌려주고, <strong>슈퍼바이저가 다시 판단</strong>해서 차트 에이전트를 호출한다. — 이 "직접 환승 vs 항상 허브 경유" 차이를 그림 없이 설명할 수 있으면 7.1 통과.</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="upcoming-h" id="upcoming" style="margin-top:56px;">
+    <div class="section-head">
+      <div class="kicker">7.2 – 7.6 · 미개통 구간</div>
+      <h2 id="upcoming-h">다음 정거장들 — Phase 2 ~ 6 미리보기</h2>
+    </div>
+    <div class="preview-grid">
+
+      <div class="preview-card wide">
+        <div class="top-row">
+          <span class="ptag">PHASE 2 · 7.2</span>
+          <span class="status pending">다음 정거장</span>
+        </div>
+        <h4>핸드오프를 위한 기능 살펴보기</h4>
+        <span class="pattern-tag">핸드오프 기초</span>
+        <ul>
+          <li>7.2.1 핸드오프 개념과 <code style="font-family:var(--font-mono)">Command</code> 사용법 익히기</li>
+          <li>7.2.2 조건에 따른 <code style="font-family:var(--font-mono)">Command</code> 사용법 알아보기</li>
+        </ul>
+        <p class="cp"><b>체크포인트</b> — 한 노드에서 Command로 다음 노드와 상태 업데이트를 동시에 지정하는 최소 예제가 동작한다.</p>
+      </div>
+
+      <div class="preview-card">
+        <div class="top-row">
+          <span class="ptag">PHASE 3 · 7.3</span>
+          <span class="status todo">예정</span>
+        </div>
+        <h4>정보 검색 → 차트 생성 에이전트</h4>
+        <span class="pattern-tag" style="color:var(--line-network)">네트워크 패턴</span>
+        <ul>
+          <li>멀티 에이전트 그래프 만들기</li>
+          <li>Tavily 기반 정보 검색 에이전트</li>
+          <li>차트 생성 에이전트</li>
+        </ul>
+        <p class="cp"><b>체크포인트</b> — 검색 에이전트 → 차트 에이전트로 핸드오프되어 결과가 나온다.</p>
+      </div>
+
+      <div class="preview-card">
+        <div class="top-row">
+          <span class="ptag">PHASE 4 · 7.4</span>
+          <span class="status todo">예정</span>
+        </div>
+        <h4>웹페이지 요약 → DB 저장 에이전트</h4>
+        <span class="pattern-tag" style="color:var(--line-supervisor)">슈퍼바이저 패턴</span>
+        <ul>
+          <li>웹 분석 에이전트</li>
+          <li>DB 관리 에이전트 + 환경 설정</li>
+          <li>슈퍼바이저 그래프 구축</li>
+        </ul>
+        <p class="cp"><b>체크포인트</b> — URL을 주면 웹 분석 → DB 저장 순으로 위임하고, 다시 조회도 가능하다.</p>
+      </div>
+
+      <div class="preview-card">
+        <div class="top-row">
+          <span class="ptag">PHASE 5 · 7.5</span>
+          <span class="status todo">예정</span>
+        </div>
+        <h4>최신 검색 + 내부 DB + FAQ 3중 에이전트</h4>
+        <span class="pattern-tag" style="color:var(--line-supervisor)">슈퍼바이저 패턴</span>
+        <ul>
+          <li>슈퍼바이저 그래프 생성</li>
+          <li>최신 검색 / 내부 검색 / FAQ 에이전트 각각 구현</li>
+          <li>핸드오프 도구화</li>
+        </ul>
+        <p class="cp"><b>체크포인트</b> — 질문 유형(최신 정보/내부 문서/단순 FAQ)에 따라 올바른 하위 에이전트로 라우팅된다.</p>
+      </div>
+
+      <div class="preview-card">
+        <div class="top-row">
+          <span class="ptag">PHASE 6 · 7.6</span>
+          <span class="status todo">예정</span>
+        </div>
+        <h4>자료 조사 + 문서 작성 에이전트</h4>
+        <span class="pattern-tag" style="color:var(--line-hierarchy)">플래닝 기반 슈퍼바이저</span>
+        <ul>
+          <li>작업 계획을 세우는 Planner</li>
+          <li>자료 조사 에이전트 + 보고서 작성 에이전트</li>
+          <li>슈퍼바이저가 계획대로 반복 호출</li>
+        </ul>
+        <p class="cp"><b>체크포인트</b> — 주제 하나만 입력하면 Planner가 계획을 세우고 최종 보고서까지 자동 완성한다.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <span>『만들면서 배우는 AI 에이전트 개발 입문+실전』 7장 — <span class="mono">plan.md</span> · <span class="mono">notes.md</span> 기반 학습 정리</span>
+    <span class="mono">Phase 0–1 완료 / Phase 2 진행 예정</span>
+  </footer>
+
+</div>

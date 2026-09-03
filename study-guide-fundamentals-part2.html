@@ -1,0 +1,367 @@
+<title>에이전트 조립 설명서 · 조립편</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;900&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F5F8; --bg-elevated:#FFFFFF; --bg-elevated-2:#EBEDF2;
+    --ink:#1B1E29; --ink-soft:#565C70; --ink-faint:#8A90A3;
+    --rail:#CBCFD9; --rail-soft:#E3E5EC; --border: rgba(27,30,41,0.11);
+    --teal:#0C7A7A; --amber:#B4650A; --violet:#5B3FC4; --accent: var(--amber);
+    --code-bg:#1B1E29; --code-ink:#E7E9F2; --code-key:#7FB3F2; --code-str:#8FD9A8; --code-com:#8A90A3;
+    --shadow: 0 1px 2px rgba(20,22,30,0.04), 0 8px 24px -12px rgba(20,22,30,0.16);
+    --font-display:'Gothic A1','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    --font-body:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    --font-mono:'IBM Plex Mono','D2Coding',ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#13151D; --bg-elevated:#1B1E29; --bg-elevated-2:#232733;
+      --ink:#E7E9F2; --ink-soft:#AEB3C4; --ink-faint:#7C8296;
+      --rail:#3B404F; --rail-soft:#282C39; --border: rgba(231,233,242,0.13);
+      --teal:#4CD9CE; --amber:#F2A94A; --violet:#B7A0FC;
+      --code-bg:#0D0E13; --code-ink:#DCE0F0;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -14px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#13151D; --bg-elevated:#1B1E29; --bg-elevated-2:#232733;
+    --ink:#E7E9F2; --ink-soft:#AEB3C4; --ink-faint:#7C8296;
+    --rail:#3B404F; --rail-soft:#282C39; --border: rgba(231,233,242,0.13);
+    --teal:#4CD9CE; --amber:#F2A94A; --violet:#B7A0FC;
+    --code-bg:#0D0E13; --code-ink:#DCE0F0;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -14px rgba(0,0,0,0.6);
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background: radial-gradient(circle, var(--rail-soft) 1px, transparent 1.4px) 0 0/24px 24px, var(--bg);
+    color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.7; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{ font-family:var(--font-display); text-wrap:balance; margin:0; }
+  p{ margin:0; }
+  a{ color:inherit; }
+  ::selection{ background:var(--amber); color:#1B1E29; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:4px; }
+  code{ font-family:var(--font-mono); background:var(--rail-soft); padding:1px 5px; border-radius:4px; font-size:0.85em; color:var(--ink); }
+
+  .wrap{ max-width:880px; margin:0 auto; padding:0 20px 100px; }
+
+  header.hero{ padding:60px 0 36px; }
+  .eyebrow{ display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.12em; color:var(--ink-faint); text-transform:uppercase; margin-bottom:18px; }
+  .eyebrow::before{ content:""; width:16px; height:2px; background:var(--amber); display:inline-block; }
+  h1{ font-weight:900; font-size:clamp(1.9rem, 3.4vw + 1rem, 2.9rem); letter-spacing:-0.01em; }
+  .lede{ margin-top:16px; max-width:60ch; color:var(--ink-soft); font-size:1.05rem; }
+  .part-switch{ display:inline-flex; gap:8px; margin-top:20px; }
+  .part-switch span{ font-family:var(--font-mono); font-size:0.78rem; padding:6px 12px; border-radius:999px; border:1px solid var(--border); }
+  .part-switch .on{ background:var(--ink); color:var(--bg-elevated); border-color:var(--ink); }
+
+  nav.toc{ display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
+  nav.toc a{ display:inline-flex; align-items:center; gap:8px; background:var(--bg-elevated); border:1px solid var(--border); border-radius:999px; padding:8px 14px 8px 10px; font-size:0.85rem; font-weight:500; text-decoration:none; color:var(--ink); box-shadow:var(--shadow); }
+  .chip{ width:20px; height:20px; border-radius:6px; flex:none; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:0.68rem; font-weight:700; color:#fff; }
+
+  .part-head{ margin:76px 0 22px; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+  .part-head .num{ font-family:var(--font-mono); font-size:0.9rem; font-weight:700; color:var(--ink-faint); }
+  .part-head h2{ font-size:1.5rem; font-weight:700; }
+  .part-head .src{ margin-left:auto; font-family:var(--font-mono); font-size:0.72rem; color:var(--ink-faint); white-space:nowrap; }
+
+  .manual{ background:var(--bg-elevated); border:1px solid var(--border); border-radius:18px; padding:28px 28px 30px; box-shadow:var(--shadow); scroll-margin-top:24px; }
+  .manual + .manual{ margin-top:16px; }
+  .manual h3{ font-size:1.08rem; font-weight:700; margin-bottom:10px; }
+  .manual h3 .tag{ font-family:var(--font-mono); font-size:0.72rem; font-weight:600; color:var(--ink-faint); margin-right:10px; }
+  .manual p.body-text{ color:var(--ink-soft); font-size:0.95rem; max-width:64ch; }
+  .manual p.body-text + p.body-text{ margin-top:10px; }
+  .manual ul.pt{ margin:10px 0 0; padding-left:20px; color:var(--ink-soft); font-size:0.93rem; display:grid; gap:4px; }
+
+  .diagram-wrap{ overflow-x:auto; margin:18px -4px; }
+  .diagram-wrap svg{ width:100%; height:auto; min-width:380px; display:block; }
+  .diagram-wrap text{ font-family:var(--font-body); fill:var(--ink); }
+  .diagram-wrap text.lbl{ font-size:12.5px; font-weight:600; }
+  .diagram-wrap text.cap{ font-size:11px; fill:var(--ink-faint); }
+  .diagram-wrap text.mono{ font-family:var(--font-mono); font-size:11px; fill:var(--ink-faint); }
+
+  .pair{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .pair .diagram-wrap{ margin:0; background:var(--bg-elevated-2); border-radius:12px; padding:14px 10px; }
+  .pair figcaption{ text-align:center; font-size:0.82rem; color:var(--ink-faint); margin-top:8px; }
+  @media (max-width:620px){ .pair{ grid-template-columns:1fr; } }
+
+  /* code block */
+  .code-block{ background:var(--code-bg); color:var(--code-ink); border-radius:12px; padding:16px 18px; margin-top:14px; overflow-x:auto; }
+  .code-block pre{ margin:0; font-family:var(--font-mono); font-size:0.82rem; line-height:1.6; white-space:pre; }
+  .code-block .cmt{ color:var(--code-com); }
+  .code-label{ font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-faint); margin-top:14px; margin-bottom:-4px; display:block; }
+
+  /* framework cards */
+  .fw-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px; }
+  .fw-card{ background:var(--bg-elevated-2); border-radius:12px; padding:14px 16px; }
+  .fw-card h4{ font-size:0.92rem; font-weight:700; margin-bottom:5px; }
+  .fw-card p{ font-size:0.82rem; color:var(--ink-soft); }
+  @media (max-width:700px){ .fw-grid{ grid-template-columns:1fr; } }
+
+  .adopt-list{ list-style:none; margin:14px 0 0; padding:0; display:grid; gap:8px; }
+  .adopt-list li{ display:flex; gap:10px; font-size:0.88rem; padding:10px 14px; background:var(--bg-elevated-2); border-radius:10px; }
+  .adopt-list b{ flex:none; min-width:80px; color:var(--ink); }
+  .adopt-list span{ color:var(--ink-soft); }
+
+  .example-stop{ margin-top:16px; display:flex; gap:12px; align-items:flex-start; background:var(--bg-elevated-2); border-radius:12px; padding:14px 16px; }
+  .example-stop .icon{ flex:none; width:26px; height:26px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:0.72rem; font-weight:700; background:var(--bg-elevated); border:1px solid var(--border); color:var(--ink-faint); }
+  .example-stop p{ font-size:0.88rem; color:var(--ink-soft); }
+  .example-stop b{ color:var(--ink); }
+
+  .toolbox-note{ display:flex; gap:14px; align-items:flex-start; background:var(--bg-elevated-2); border-radius:12px; padding:16px 18px; margin-top:6px; }
+  .toolbox-note .icon{ flex:none; width:30px; height:30px; border-radius:8px; border:2px solid var(--rail); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-weight:700; color:var(--ink-faint); font-size:0.85rem; }
+  .toolbox-note p{ font-size:0.9rem; color:var(--ink-soft); }
+
+  dl.spec{ display:grid; grid-template-columns:150px 1fr; gap:0; margin:18px 0 0; border-top:1px solid var(--rail-soft); }
+  dl.spec > div{ display:contents; }
+  dl.spec dt{ padding:12px 16px 12px 0; font-weight:700; font-size:0.84rem; border-bottom:1px solid var(--rail-soft); color:var(--ink); }
+  dl.spec dd{ margin:0; padding:12px 0; color:var(--ink-soft); font-size:0.9rem; border-bottom:1px solid var(--rail-soft); }
+  @media (max-width:560px){ dl.spec{ grid-template-columns:1fr; } dl.spec dt{ padding-bottom:2px; border-bottom:none; } dl.spec dd{ padding-top:0; } }
+
+  .stack{ display:grid; gap:16px; }
+
+  footer.page{ margin-top:80px; padding-top:24px; border-top:1px solid var(--rail-soft); color:var(--ink-faint); font-size:0.82rem; display:flex; flex-wrap:wrap; gap:8px 20px; justify-content:space-between; }
+  footer.page .mono{ font-family:var(--font-mono); }
+
+  @media (max-width:560px){ header.hero{ padding-top:44px; } }
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Chapter 4 – 6 상세 · 만들면서 배우는 AI 에이전트 개발</div>
+    <h1>에이전트 조립 설명서 · 조립편</h1>
+    <p class="lede">부품편에서 다룬 LLM 판단·추론·도구·메모리를 실제로 조립하는 편. 개발 환경을 준비하고, 랭그래프의 State·Node·Edge·조건부 엣지로 흐름을 설계한 뒤, 첫 완성품인 싱글 에이전트를 만든다.</p>
+    <div class="part-switch"><span>부품편 · Ch 1–3</span><span class="on">조립편 · Ch 4–6</span></div>
+    <nav class="toc" aria-label="챕터 바로가기">
+      <a href="#ch4"><span class="chip" style="background:var(--ink-faint)">4</span>개발 환경</a>
+      <a href="#ch5"><span class="chip" style="background:var(--violet)">5</span>랭그래프</a>
+      <a href="#ch6"><span class="chip" style="background:var(--teal)">6</span>싱글 에이전트</a>
+    </nav>
+  </header>
+
+  <!-- CHAPTER 4 -->
+  <section aria-labelledby="ch4-h" id="ch4">
+    <div class="part-head">
+      <span class="num">CHAPTER 4</span>
+      <h2 id="ch4-h">에이전트 개발 환경 구축</h2>
+      <span class="src">4.1 – 4.4</span>
+    </div>
+    <div class="manual">
+      <p class="body-text">이 챕터는 이론보다 준비 과정에 가깝다. 실습 범위는 네 단계다.</p>
+      <dl class="spec">
+        <div><dt>4.1 에디터</dt><dd>VS Code 설치 및 프로젝트 폴더 생성</dd></div>
+        <div><dt>4.2 가상환경</dt><dd>아나콘다 설치 및 가상 환경 구성</dd></div>
+        <div><dt>4.3 환경변수</dt><dd><code>.env</code> 파일 작성 + <code>python-dotenv</code>로 불러오기</dd></div>
+        <div><dt>4.4 LLM 호출</dt><dd>OpenAI API 직접 호출 → 랭체인으로 OpenAI LLM 호출</dd></div>
+      </dl>
+      <div class="toolbox-note">
+        <span class="icon">0</span>
+        <p>이 프로젝트에서는 같은 내용을 <b>Phase 0</b>로 이미 체크했다 — 가상환경·패키지 설치는 완료, API 키 등록만 남은 상태다. <span style="color:var(--ink-faint)">(체크리스트는 <code>study-guide.html</code>의 Phase 0 참고)</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 5 -->
+  <section aria-labelledby="ch5-h" id="ch5">
+    <div class="part-head">
+      <span class="num">CHAPTER 5</span>
+      <h2 id="ch5-h">랭그래프 기반 에이전트 설계</h2>
+      <span class="src">5.1 – 5.3</span>
+    </div>
+
+    <div class="stack">
+      <div class="manual">
+        <h3><span class="tag">5.1</span>왜 랭그래프인가</h3>
+        <p class="body-text">랭그래프(LangGraph)는 시스템의 로직을 <b>노드(작업 단위)</b>와 <b>엣지(실행 경로)</b>로 이루어진 그래프로 표현하는 프레임워크다. 경로가 복잡한 에이전트도 비교적 쉽게 설계할 수 있고, 반복·병렬 처리 같은 복잡한 제어 흐름까지 명확히 표현한다. 핵심 철학은 <b>"상태 관리"</b> — 작업 중 발생하는 모든 중간 정보와 상태 변화를 그래프 안에서 관리하므로 복잡한 협업도 안정적으로 처리한다. 랭체인(LangChain) 생태계와 통합되어 LLM 호출·도구 사용·메모리 등을 그대로 활용할 수 있다.</p>
+
+        <span class="code-label">다른 프레임워크와의 결</span>
+        <div class="fw-grid">
+          <div class="fw-card"><h4>CrewAI</h4><p>역할 기반 멀티 에이전트에 강점. 여러 에이전트를 "크루" 단위로 묶어 정해진 순서대로 실행 — 책임 구조가 분명한 워크플로에 적합.</p></div>
+          <div class="fw-card"><h4>AutoGen</h4><p>마이크로소프트 개발. 에이전트를 팀으로 구성해 그룹 채팅처럼 협업 — 발언 순서·담당을 유연하게 조정.</p></div>
+          <div class="fw-card"><h4>LlamaIndex</h4><p>데이터 수집·검색에 강점. 외부 데이터 소스를 LLM이 쉽게 검색·활용하도록 인덱스로 연결.</p></div>
+        </div>
+
+        <span class="code-label">실무 도입 사례 (랭체인 공식 5개 기업)</span>
+        <ul class="adopt-list">
+          <li><b>Replit</b><span>멀티 에이전트 시스템 운영</span></li>
+          <li><b>Elastic</b><span>랭체인에서 랭그래프로 마이그레이션해 컨트롤 가능한 아키텍처 구현</span></li>
+          <li><b>LinkedIn</b><span>질문을 SQL로 변환·최적화하는 사내 멀티 에이전트 'SQL Bot'</span></li>
+          <li><b>AppFolio</b><span>부동산 관리 자동화 AI 코파일럿 'Realm-X'</span></li>
+          <li><b>Uber</b><span>내부 코드 마이그레이션·테스트 자동화</span></li>
+        </ul>
+      </div>
+
+      <div class="manual">
+        <h3><span class="tag">5.1.1</span>노드와 엣지 — 그래프의 두 재료</h3>
+        <p class="body-text"><b>노드</b>는 그래프를 이루는 기본 단위(작업 단계), <b>엣지</b>는 노드 사이의 연결(순서·관계)이다. 엣지는 방향성을 가질 수도, 없을 수도 있다 — "철수는 영희를 좋아한다"처럼 한쪽으로만 향하면 방향 엣지, "철수와 영희는 SNS 맞팔이다"처럼 쌍방향 관계면 방향 없는 엣지로 표현한다.</p>
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 500 170" role="img" aria-label="작업 a에서 시작해 b, c를 거쳐 d로 향하는 그래프 흐름 예시">
+            <defs><marker id="g5a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--violet)"/></marker></defs>
+            <circle cx="30" cy="85" r="18" style="fill:var(--ink);stroke:var(--ink)"/>
+            <text class="lbl" x="30" y="89" text-anchor="middle" style="font-size:9px;fill:var(--bg-elevated)">START</text>
+            <line x1="48" y1="85" x2="86" y2="85" style="stroke:var(--violet)" stroke-width="2.2" marker-end="url(#g5a)"/>
+            <rect x="88" y="62" width="70" height="46" rx="8" style="fill:var(--bg-elevated);stroke:var(--violet)" stroke-width="2.6"/>
+            <text class="lbl" x="123" y="89" text-anchor="middle" style="font-size:12px">작업 a</text>
+            <line x1="158" y1="85" x2="196" y2="85" style="stroke:var(--violet)" stroke-width="2.2" marker-end="url(#g5a)"/>
+            <rect x="198" y="62" width="70" height="46" rx="8" style="fill:var(--bg-elevated);stroke:var(--violet)" stroke-width="2.6"/>
+            <text class="lbl" x="233" y="89" text-anchor="middle" style="font-size:12px">작업 b</text>
+            <line x1="268" y1="85" x2="306" y2="85" style="stroke:var(--violet)" stroke-width="2.2" marker-end="url(#g5a)"/>
+            <rect x="308" y="62" width="70" height="46" rx="8" style="fill:var(--bg-elevated);stroke:var(--violet)" stroke-width="2.6"/>
+            <text class="lbl" x="343" y="89" text-anchor="middle" style="font-size:12px">작업 c</text>
+            <line x1="378" y1="85" x2="416" y2="85" style="stroke:var(--violet)" stroke-width="2.2" marker-end="url(#g5a)"/>
+            <rect x="418" y="62" width="70" height="46" rx="8" style="fill:var(--bg-elevated);stroke:var(--ink)" stroke-width="2.6"/>
+            <text class="lbl" x="453" y="89" text-anchor="middle" style="font-size:12px">작업 d</text>
+            <text class="mono" x="250" y="30" text-anchor="middle">노드 = 작업 단위, 엣지 = 실행 순서</text>
+          </svg>
+        </div>
+        <p class="body-text"><span class="tag" style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-faint);">5.1.2</span>랭그래프를 쓰는 이유는 네 가지다 — <b>①</b> 여러 단계의 복잡한 로직도 그래프로 구현 가능, <b>②</b> 노드·엣지 단위로 재설계하기 쉬운 확장성, <b>③</b> 조건에 따라 흐름을 나누는 분기 처리, <b>④</b> 이전 단계로 되돌아가는 양방향 파이프라인 구성.</p>
+      </div>
+
+      <div class="manual">
+        <h3><span class="tag">5.2</span>기본 개념 4가지 — State · Reducer/Node · Edge · 조건부 엣지</h3>
+        <p class="body-text">Phase 0 체크리스트에서 "숙지만" 표시해뒀던 개념이 여기서 구체화된다.</p>
+
+        <p class="body-text" style="margin-top:14px;"><b>① State (상태)</b> — 그래프가 지속적으로 관리하는 데이터 구조. 챗봇이라면 메시지 목록을 <code>messages</code> 키로 관리한다.</p>
+        <div class="code-block"><pre><span class="cmt"># 5.2.1 그래프의 상태 정의하기</span>
+from typing import TypedDict
+
+class State(TypedDict):
+    messages: list[str]</pre></div>
+
+        <p class="body-text" style="margin-top:14px;"><b>리듀서(reducer)</b> — 상태가 업데이트되는 방식을 지정하는 함수. 기본값은 "덮어쓰기"지만, <code>Annotated</code>로 리듀서를 지정하면 기존 값에 새 값을 <b>누적</b>할 수 있다. 랭그래프는 메시지 누적용 리듀서 <code>add_messages</code>를 기본 제공한다.</p>
+        <div class="code-block"><pre><span class="cmt"># 5.2.2 리듀서로 메시지를 누적시키기</span>
+from typing import TypedDict, Annotated
+from langgraph.graph.message import add_messages
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]</pre></div>
+
+        <p class="body-text" style="margin-top:14px;"><b>② Node (노드)</b> — 상태를 입력받아 처리하고, 업데이트할 값을 반환하는 함수. <code>add_node</code>로 그래프에 등록한다.</p>
+        <div class="code-block"><pre><span class="cmt"># 5.2.3 답변을 생성하는 노드 만들기</span>
+def chatbot(state: State):
+    question = state["messages"]
+    answer = f"'{question}'라는 질문을 받았습니다."
+    return {"messages": [answer]}
+
+graph.add_node("chatbot", chatbot)</pre></div>
+
+        <p class="body-text" style="margin-top:14px;"><b>③ Edge (엣지)</b> — 다음에 실행될 경로. 그래프는 반드시 시작점(<code>START</code>)과 종료점(<code>END</code>)을 가져야 한다.</p>
+        <div class="code-block"><pre><span class="cmt"># 5.2.4 시작점 · 종료점과 엣지로 연결하기</span>
+from langgraph.graph import START, END
+
+graph.add_edge(START, "chatbot")
+graph.add_edge("chatbot", END)</pre></div>
+
+        <p class="body-text" style="margin-top:14px;"><b>④ 조건부 엣지</b> — 다음 노드를 조건에 따라 갈라주는 엣지. 라우터 LLM의 판단 결과를 실제 흐름 분기로 연결하는 지점이 바로 여기다.</p>
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 400 260" role="img" aria-label="START에서 chatbot을 거쳐 조건부 엣지로 summary 노드 또는 END로 분기하는 랭그래프 다이어그램">
+            <defs><marker id="g5b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--violet)"/></marker></defs>
+            <circle cx="200" cy="24" r="18" style="fill:var(--ink);stroke:var(--ink)"/>
+            <text class="lbl" x="200" y="28" text-anchor="middle" style="font-size:10px;fill:var(--bg-elevated)">START</text>
+            <line x1="200" y1="42" x2="200" y2="62" style="stroke:var(--violet)" stroke-width="2.4" marker-end="url(#g5b)"/>
+            <rect x="140" y="64" width="120" height="46" rx="8" style="fill:var(--bg-elevated);stroke:var(--violet)" stroke-width="2.6"/>
+            <text class="lbl" x="200" y="92" text-anchor="middle" style="font-size:12px">chatbot</text>
+            <line x1="200" y1="110" x2="200" y2="132" style="stroke:var(--violet)" stroke-width="2.4" marker-end="url(#g5b)"/>
+            <polygon points="200,132 250,168 200,204 150,168" style="fill:var(--bg-elevated);stroke:var(--amber)" stroke-width="2.4"/>
+            <text class="cap" x="200" y="172" text-anchor="middle">답변이 1000자 초과?</text>
+            <line x1="242" y1="180" x2="300" y2="212" style="stroke:var(--violet)" stroke-width="2.2" marker-end="url(#g5b)"/>
+            <text class="cap" x="300" y="200" text-anchor="middle">True</text>
+            <rect x="250" y="214" width="130" height="40" rx="8" style="fill:var(--bg-elevated);stroke:var(--rail)" stroke-width="2"/>
+            <text class="lbl" x="315" y="239" text-anchor="middle" style="font-size:12px">summary 노드</text>
+            <line x1="158" y1="180" x2="100" y2="212" style="stroke:var(--violet)" stroke-width="2.2" marker-end="url(#g5b)"/>
+            <text class="cap" x="100" y="200" text-anchor="middle">False</text>
+            <rect x="20" y="214" width="130" height="40" rx="8" style="fill:var(--bg-elevated);stroke:var(--rail)" stroke-width="2"/>
+            <text class="lbl" x="85" y="239" text-anchor="middle" style="font-size:12px">END</text>
+          </svg>
+        </div>
+        <div class="code-block"><pre><span class="cmt"># 5.2.5 라우팅 함수 정의하고 조건부 엣지 추가하기</span>
+def routing_function(state: State):
+    if len(state["messages"][-1]) > 1000:
+        return True
+    return False
+
+graph.add_conditional_edges(
+    "chatbot",
+    routing_function,
+    {True: "summary", False: END}
+)</pre></div>
+        <p class="body-text" style="margin-top:14px;">응답 길이·의도 분류 결과 등 <b>라우터 역할을 하는 중간 노드의 출력</b>을 기준으로 다음 행동을 결정해야 할 때 조건부 엣지를 사용한다 — 챕터 1의 "라우터" 개념이 랭그래프 코드로 그대로 구현되는 지점이다.</p>
+      </div>
+
+      <div class="manual">
+        <h3><span class="tag">5.3</span>랭그래프로 에이전트 설계하고 구현하기</h3>
+        <p class="body-text">지금까지의 요소로 실제 챗봇 그래프를 만든다. 입력 스키마(<code>question</code>)와 출력 스키마(<code>answer</code>)를 상태 전체 스키마(<code>messages</code>)와 다르게 정의할 수도 있다 — 입력·출력에는 최소한의 키만 노출하고, 내부 상태는 더 풍부하게 관리하는 식이다. 이 그래프가 챕터 6 싱글 에이전트 구현의 뼈대가 된다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 6 -->
+  <section aria-labelledby="ch6-h" id="ch6">
+    <div class="part-head">
+      <span class="num">CHAPTER 6</span>
+      <h2 id="ch6-h">싱글 에이전트 구현</h2>
+      <span class="src">6.1, 6.4, 6.5.1</span>
+    </div>
+
+    <div class="stack">
+      <div class="manual">
+        <h3><span class="tag">6.4</span><code>create_agent</code> — 부품을 한 번에 조립</h3>
+        <p class="body-text">모델, 도구 목록, 시스템 프롬프트를 넣으면 ReAct 루프가 도는 에이전트 그래프를 랭그래프가 바로 만들어주는 조립 함수다. 미들웨어를 추가하거나 구조화 출력을 정의해 세부 동작을 조정할 수 있다.</p>
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 420 130" role="img" aria-label="model, tools, prompt가 create_agent 함수로 들어가 Agent가 나오는 다이어그램">
+            <defs><marker id="cA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--amber)"/></marker></defs>
+            <rect x="6" y="8" width="86" height="32" rx="7" style="fill:var(--bg-elevated);stroke:var(--rail)" stroke-width="2"/>
+            <text class="mono" x="49" y="28" text-anchor="middle" style="font-size:10.5px">model</text>
+            <rect x="6" y="49" width="86" height="32" rx="7" style="fill:var(--bg-elevated);stroke:var(--rail)" stroke-width="2"/>
+            <text class="mono" x="49" y="69" text-anchor="middle" style="font-size:10.5px">tools</text>
+            <rect x="6" y="90" width="86" height="32" rx="7" style="fill:var(--bg-elevated);stroke:var(--rail)" stroke-width="2"/>
+            <text class="mono" x="49" y="110" text-anchor="middle" style="font-size:10.5px">prompt</text>
+            <line x1="94" y1="24" x2="150" y2="60" style="stroke:var(--amber)" stroke-width="1.8"/>
+            <line x1="94" y1="65" x2="150" y2="65" style="stroke:var(--amber)" stroke-width="1.8"/>
+            <line x1="94" y1="106" x2="150" y2="70" style="stroke:var(--amber)" stroke-width="1.8"/>
+            <rect x="152" y="38" width="140" height="54" rx="10" style="fill:var(--bg-elevated);stroke:var(--amber)" stroke-width="3"/>
+            <text class="mono" x="222" y="70" text-anchor="middle" style="font-size:11px">create_agent()</text>
+            <line x1="292" y1="65" x2="330" y2="65" style="stroke:var(--amber)" stroke-width="2.4" marker-end="url(#cA)"/>
+            <rect x="332" y="38" width="82" height="54" rx="10" style="fill:var(--bg-elevated);stroke:var(--ink)" stroke-width="2.6"/>
+            <text class="lbl" x="373" y="70" text-anchor="middle" style="font-size:12px">Agent</text>
+          </svg>
+        </div>
+        <p class="body-text"><span class="tag" style="font-family:var(--font-mono);font-size:0.72rem;color:var(--ink-faint);">6.1 · 6.2 · 6.3</span>이 함수를 기반으로 웹 검색 에이전트(타빌리 검색 도구 호출), 코딩 에이전트(코드 실행·파일 저장 도구), RAG 에이전트(벡터DB 검색 도구)를 각각 구현하는 것이 6장 실습의 핵심이다.</p>
+      </div>
+
+      <div class="manual">
+        <h3><span class="tag">6.5.1</span>RAG란 — 검색으로 근거를 보강한다</h3>
+        <p class="body-text">질문에 답하기 전 벡터DB에서 관련 문서를 찾아 프롬프트에 끼워 넣고, 그 근거를 바탕으로 LLM이 답한다. 모델이 모르는 최신·내부 정보를 다루는 표준 방법이다.</p>
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 500 110" role="img" aria-label="질문이 벡터 검색을 거쳐 관련 문서를 찾고 프롬프트에 결합해 LLM이 답변하는 RAG 파이프라인">
+            <defs><marker id="rC" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--teal)"/></marker></defs>
+            <rect x="4" y="34" width="82" height="44" rx="8" style="fill:var(--bg-elevated);stroke:var(--teal)" stroke-width="2.4"/>
+            <text class="lbl" x="45" y="60" text-anchor="middle" style="font-size:11px">질문</text>
+            <line x1="86" y1="56" x2="106" y2="56" style="stroke:var(--teal)" stroke-width="2.2" marker-end="url(#rC)"/>
+            <rect x="108" y="30" width="98" height="52" rx="8" style="fill:var(--bg-elevated);stroke:var(--teal)" stroke-width="2.4"/>
+            <text class="lbl" x="157" y="52" text-anchor="middle" style="font-size:10.5px">벡터DB</text>
+            <text class="lbl" x="157" y="68" text-anchor="middle" style="font-size:10.5px">유사도 검색</text>
+            <line x1="206" y1="56" x2="226" y2="56" style="stroke:var(--teal)" stroke-width="2.2" marker-end="url(#rC)"/>
+            <rect x="228" y="30" width="98" height="52" rx="8" style="fill:var(--bg-elevated);stroke:var(--teal)" stroke-width="2.4"/>
+            <text class="lbl" x="277" y="52" text-anchor="middle" style="font-size:10.5px">관련 문서</text>
+            <text class="lbl" x="277" y="68" text-anchor="middle" style="font-size:10.5px">프롬프트 결합</text>
+            <line x1="326" y1="56" x2="346" y2="56" style="stroke:var(--teal)" stroke-width="2.2" marker-end="url(#rC)"/>
+            <rect x="348" y="34" width="60" height="44" rx="8" style="fill:var(--bg-elevated);stroke:var(--ink)" stroke-width="2.4"/>
+            <text class="lbl" x="378" y="60" text-anchor="middle" style="font-size:11px">LLM</text>
+            <line x1="408" y1="56" x2="428" y2="56" style="stroke:var(--teal)" stroke-width="2.2" marker-end="url(#rC)"/>
+            <rect x="430" y="34" width="66" height="44" rx="8" style="fill:var(--bg-elevated);stroke:var(--rail)" stroke-width="2.2"/>
+            <text class="lbl" x="463" y="60" text-anchor="middle" style="font-size:11px">답변</text>
+          </svg>
+        </div>
+        <p class="body-text">이렇게 완성된 ReAct 기반 싱글 에이전트가 7장 멀티 에이전트의 <b>구성 단위</b>가 된다 — 네트워크·슈퍼바이저 패턴 모두 결국 이런 싱글 에이전트 여러 개를 어떻게 연결하느냐의 문제다.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="page">
+    <span>『만들면서 배우는 AI 에이전트 개발 입문+실전』 Chapter 4–6 이론 정리 · 부품편(Ch 1–3)은 별도 파일</span>
+    <span class="mono">Part 02</span>
+  </footer>
+
+</div>

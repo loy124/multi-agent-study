@@ -1,0 +1,456 @@
+<title>에이전트 조립 설명서 · 부품편</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;900&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F5F8; --bg-elevated:#FFFFFF; --bg-elevated-2:#EBEDF2;
+    --ink:#1B1E29; --ink-soft:#565C70; --ink-faint:#8A90A3;
+    --rail:#CBCFD9; --rail-soft:#E3E5EC; --border: rgba(27,30,41,0.11);
+    --teal:#0C7A7A; --amber:#B4650A; --violet:#5B3FC4; --accent: var(--amber);
+    --shadow: 0 1px 2px rgba(20,22,30,0.04), 0 8px 24px -12px rgba(20,22,30,0.16);
+    --font-display:'Gothic A1','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    --font-body:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    --font-mono:'IBM Plex Mono','D2Coding',ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#13151D; --bg-elevated:#1B1E29; --bg-elevated-2:#232733;
+      --ink:#E7E9F2; --ink-soft:#AEB3C4; --ink-faint:#7C8296;
+      --rail:#3B404F; --rail-soft:#282C39; --border: rgba(231,233,242,0.13);
+      --teal:#4CD9CE; --amber:#F2A94A; --violet:#B7A0FC;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -14px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#13151D; --bg-elevated:#1B1E29; --bg-elevated-2:#232733;
+    --ink:#E7E9F2; --ink-soft:#AEB3C4; --ink-faint:#7C8296;
+    --rail:#3B404F; --rail-soft:#282C39; --border: rgba(231,233,242,0.13);
+    --teal:#4CD9CE; --amber:#F2A94A; --violet:#B7A0FC;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -14px rgba(0,0,0,0.6);
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background: radial-gradient(circle, var(--rail-soft) 1px, transparent 1.4px) 0 0/24px 24px, var(--bg);
+    color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.7; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{ font-family:var(--font-display); text-wrap:balance; margin:0; }
+  p{ margin:0; }
+  a{ color:inherit; }
+  ::selection{ background:var(--amber); color:#1B1E29; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:4px; }
+  code{ font-family:var(--font-mono); background:var(--rail-soft); padding:1px 5px; border-radius:4px; font-size:0.85em; color:var(--ink); }
+
+  .wrap{ max-width:880px; margin:0 auto; padding:0 20px 100px; }
+
+  header.hero{ padding:60px 0 36px; }
+  .eyebrow{ display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.12em; color:var(--ink-faint); text-transform:uppercase; margin-bottom:18px; }
+  .eyebrow::before{ content:""; width:16px; height:2px; background:var(--amber); display:inline-block; }
+  h1{ font-weight:900; font-size:clamp(1.9rem, 3.4vw + 1rem, 2.9rem); letter-spacing:-0.01em; }
+  .lede{ margin-top:16px; max-width:60ch; color:var(--ink-soft); font-size:1.05rem; }
+  .part-switch{ display:inline-flex; gap:8px; margin-top:20px; }
+  .part-switch span{ font-family:var(--font-mono); font-size:0.78rem; padding:6px 12px; border-radius:999px; border:1px solid var(--border); }
+  .part-switch .on{ background:var(--ink); color:var(--bg-elevated); border-color:var(--ink); }
+
+  nav.toc{ display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
+  nav.toc a{ display:inline-flex; align-items:center; gap:8px; background:var(--bg-elevated); border:1px solid var(--border); border-radius:999px; padding:8px 14px 8px 10px; font-size:0.85rem; font-weight:500; text-decoration:none; color:var(--ink); box-shadow:var(--shadow); }
+  .chip{ width:20px; height:20px; border-radius:6px; flex:none; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:0.68rem; font-weight:700; color:#fff; }
+
+  .part-head{ margin:76px 0 22px; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+  .part-head .num{ font-family:var(--font-mono); font-size:0.9rem; font-weight:700; color:var(--ink-faint); }
+  .part-head h2{ font-size:1.5rem; font-weight:700; }
+  .part-head .src{ margin-left:auto; font-family:var(--font-mono); font-size:0.72rem; color:var(--ink-faint); white-space:nowrap; }
+
+  .manual{ background:var(--bg-elevated); border:1px solid var(--border); border-radius:18px; padding:28px 28px 30px; box-shadow:var(--shadow); scroll-margin-top:24px; }
+  .manual + .manual{ margin-top:16px; }
+  .manual h3{ font-size:1.08rem; font-weight:700; margin-bottom:10px; }
+  .manual h3 .tag{ font-family:var(--font-mono); font-size:0.72rem; font-weight:600; color:var(--ink-faint); margin-right:10px; }
+  .manual p.body-text{ color:var(--ink-soft); font-size:0.95rem; max-width:64ch; }
+  .manual p.body-text + p.body-text{ margin-top:10px; }
+  .manual ul.pt{ margin:10px 0 0; padding-left:20px; color:var(--ink-soft); font-size:0.93rem; display:grid; gap:4px; }
+
+  .diagram-wrap{ overflow-x:auto; margin:18px -4px; }
+  .diagram-wrap svg{ width:100%; height:auto; min-width:380px; display:block; }
+  .diagram-wrap text{ font-family:var(--font-body); fill:var(--ink); }
+  .diagram-wrap text.lbl{ font-size:12.5px; font-weight:600; }
+  .diagram-wrap text.cap{ font-size:11px; fill:var(--ink-faint); }
+  .diagram-wrap text.mono{ font-family:var(--font-mono); font-size:11px; fill:var(--ink-faint); }
+
+  .pair{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .pair .diagram-wrap{ margin:0; background:var(--bg-elevated-2); border-radius:12px; padding:14px 10px; }
+  .pair figcaption{ text-align:center; font-size:0.82rem; color:var(--ink-faint); margin-top:8px; }
+  @media (max-width:620px){ .pair{ grid-template-columns:1fr; } }
+
+  /* Q&A prompt card */
+  .qa-card{ border-radius:12px; overflow:hidden; border:1px solid var(--border); margin-top:16px; }
+  .qa-card .row{ padding:13px 16px; font-size:0.87rem; }
+  .qa-card .row.q{ background:var(--bg-elevated-2); }
+  .qa-card .row.a{ background:var(--bg-elevated); border-top:1px solid var(--border); color:var(--ink-soft); }
+  .qa-card .tag{ display:inline-block; font-family:var(--font-mono); font-size:0.68rem; font-weight:700; letter-spacing:0.05em; color:var(--ink-faint); margin-right:8px; vertical-align:top; }
+  .qa-card .row.q .tag{ color:var(--amber); }
+  .qa-card .row.a .tag{ color:var(--teal); }
+  .qa-card .label{ display:block; font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-faint); padding:9px 16px 0; background:var(--bg-elevated-2); }
+
+  .badge-pair{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+  .badge-pair span{ font-size:0.8rem; padding:7px 13px; border-radius:999px; border:1.5px dashed var(--rail); color:var(--ink-faint); }
+  .badge-pair span.on{ border-style:solid; border-color:var(--teal); color:var(--teal); font-weight:600; }
+
+  .quote-box{ margin-top:16px; border:1px solid var(--border); border-left:3px solid var(--violet); border-radius:0 10px 10px 0; padding:14px 18px; background:var(--bg-elevated-2); }
+  .quote-box p{ font-size:0.88rem; color:var(--ink-soft); }
+  .quote-box p + p{ margin-top:8px; }
+  .quote-box .en{ font-style:italic; color:var(--ink-faint); font-size:0.84rem; }
+  .quote-box footer{ margin-top:10px; font-size:0.78rem; color:var(--ink-faint); border:none; padding:0; }
+
+  .example-stop{ margin-top:16px; display:flex; gap:12px; align-items:flex-start; background:var(--bg-elevated-2); border-radius:12px; padding:14px 16px; }
+  .example-stop .icon{ flex:none; width:26px; height:26px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:0.72rem; font-weight:700; background:var(--bg-elevated); border:1px solid var(--border); color:var(--ink-faint); }
+  .example-stop p{ font-size:0.88rem; color:var(--ink-soft); }
+  .example-stop b{ color:var(--ink); }
+
+  dl.spec{ display:grid; grid-template-columns:150px 1fr; gap:0; margin:18px 0 0; border-top:1px solid var(--rail-soft); }
+  dl.spec > div{ display:contents; }
+  dl.spec dt{ padding:12px 16px 12px 0; font-weight:700; font-size:0.84rem; border-bottom:1px solid var(--rail-soft); color:var(--ink); }
+  dl.spec dd{ margin:0; padding:12px 0; color:var(--ink-soft); font-size:0.9rem; border-bottom:1px solid var(--rail-soft); }
+  @media (max-width:560px){ dl.spec{ grid-template-columns:1fr; } dl.spec dt{ padding-bottom:2px; border-bottom:none; } dl.spec dd{ padding-top:0; } }
+
+  .table-wrap{ overflow-x:auto; margin-top:16px; }
+  table.compare{ width:100%; border-collapse:collapse; min-width:520px; font-size:0.87rem; }
+  table.compare th, table.compare td{ text-align:left; padding:11px 14px; border-bottom:1px solid var(--rail-soft); vertical-align:top; }
+  table.compare thead th{ font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-faint); font-weight:600; background:var(--bg-elevated-2); }
+  table.compare tbody tr:last-child td{ border-bottom:none; }
+  table.compare td.k{ font-weight:700; white-space:nowrap; color:var(--ink); }
+  table.compare td:not(.k){ color:var(--ink-soft); }
+
+  .stack{ display:grid; gap:16px; }
+
+  footer.page{ margin-top:80px; padding-top:24px; border-top:1px solid var(--rail-soft); color:var(--ink-faint); font-size:0.82rem; display:flex; flex-wrap:wrap; gap:8px 20px; justify-content:space-between; }
+  footer.page .mono{ font-family:var(--font-mono); }
+
+  @media (max-width:560px){ header.hero{ padding-top:44px; } }
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Chapter 1 – 3 상세 · 만들면서 배우는 AI 에이전트 개발</div>
+    <h1>에이전트 조립 설명서 · 부품편</h1>
+    <p class="lede">7장(멀티 에이전트)에 들어가기 전, 에이전트 하나를 이루는 부품들을 뜯어본다. 이 편에서는 LLM이라는 두뇌가 어떻게 판단하는지, 추론·도구·메모리라는 3대 부품이 무엇인지, 그리고 싱글 vs 멀티 중 무엇을 골라야 하는지를 책의 실제 예시로 자세히 다룬다.</p>
+    <div class="part-switch"><span class="on">부품편 · Ch 1–3</span><span>조립편 · Ch 4–6</span></div>
+    <nav class="toc" aria-label="챕터 바로가기">
+      <a href="#ch1"><span class="chip" style="background:var(--ink-faint)">1</span>판단 구조</a>
+      <a href="#ch2"><span class="chip" style="background:var(--violet)">2</span>핵심 부품</a>
+      <a href="#ch3"><span class="chip" style="background:var(--amber)">3</span>설계 기준</a>
+    </nav>
+  </header>
+
+  <!-- CHAPTER 1 -->
+  <section aria-labelledby="ch1-h" id="ch1">
+    <div class="part-head">
+      <span class="num">CHAPTER 1</span>
+      <h2 id="ch1-h">LLM 기반 의사결정 구조와 에이전트 동작 방식</h2>
+      <span class="src">1.1 – 1.4</span>
+    </div>
+
+    <div class="stack">
+      <div class="manual">
+        <h3><span class="tag">1.1</span>LLM은 에이전트의 "두뇌"다</h3>
+        <p class="body-text">거대 언어 모델(LLM)은 방대한 텍스트를 학습해 다음에 올 내용을 예측하는 모델이다. 이 "다음을 예측하는 능력"이 곧 <b>문제 해결에 필요한 다음 단계를 추론하는 능력</b>으로 확장된다. 에이전트는 이 추론 능력을 활용해 목표 달성을 위한 행동을 계획하고 실행하는 시스템이다 — LLM이 이해·추론을 담당하고, 에이전트는 그 결과로 행동한다.</p>
+        <p class="body-text">LLM은 이미 정리된 형태로 판단을 내려주기 때문에 실무 의사결정에도 바로 쓸 수 있다. 다음 두 사례가 대표적이다.</p>
+        <div class="qa-card">
+          <span class="label">사례 1 · 우선순위 판단</span>
+          <div class="row q"><span class="tag">Q</span>다음 에러 로그를 분석해서 우선적으로 수정해야 할 이슈 순위를 알려줘.</div>
+          <div class="row a"><span class="tag">A</span>[Critical] DB 연결 시간 초과 — 발생 빈도 532회/24시간, 모든 결제 요청이 실패하는 치명적 이슈. 권장 조치: DB 커넥션 풀 점검, 쿼리 최적화 …</div>
+        </div>
+        <div class="qa-card">
+          <span class="label">사례 2 · 대안 비교 판단</span>
+          <div class="row q"><span class="tag">Q</span>이미지+텍스트 멀티모달 검색을 구현하려 해. 후보는 Pinecone, Weaviate, Milvus, Qdrant야. (요구사항: 약 5억 개 벡터, 200ms 이하 지연, 클라우드 운영, 향후 멀티모달 확장)</div>
+          <div class="row a"><span class="tag">A</span>후보별 성능/쿼리속도/운영편의성/비용을 표로 비교한 뒤, 요구사항에 가장 맞는 후보를 근거와 함께 추천.</div>
+        </div>
+        <p class="body-text" style="margin-top:14px;">두 사례 모두 LLM이 <b>객관적으로 정리된 근거</b>를 바탕으로 결론을 내려준다는 공통점이 있다. 에이전트가 여러 단계를 거쳐 작업할 때, 각 단계에서 "다음에 무엇을 할지"를 판단하는 것도 결국 이 능력의 연장선이다.</p>
+      </div>
+
+      <div class="manual">
+        <h3><span class="tag">1.3</span>LLM이 다음 행동을 결정하다 — 라우터</h3>
+        <p class="body-text">쇼핑 플랫폼 챗봇을 생각해보자. 사용자가 "오늘 배송받은 물건에 하자가 있어요, 교환받고 싶어요"라고 입력하면, LLM은 이 문의를 [주문 조회 / 배송 조회 / 교환·환불] 중 하나로 분류해 이후 처리 로직을 결정한다. 이렇게 <b>다음 행동을 선택하는 역할</b>을 하는 요소를 <b>라우터(router)</b>라고 부른다 — 네트워크에서 데이터의 경로를 정해주는 라우터와 같은 개념이다.</p>
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 480 220" role="img" aria-label="사용자 문의가 LLM을 거쳐 주문 조회, 배송 조회, 교환환불 중 교환환불로 라우팅되는 다이어그램">
+            <defs>
+              <marker id="p1a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--ink-faint)"/></marker>
+              <marker id="p1b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--amber)"/></marker>
+            </defs>
+            <rect x="8" y="88" width="150" height="46" rx="8" style="fill:var(--bg-elevated-2);stroke:var(--rail)" stroke-width="1.6"/>
+            <text class="cap" x="83" y="106" text-anchor="middle">오늘 받은 물건에</text>
+            <text class="cap" x="83" y="120" text-anchor="middle">하자가 있어요, 교환할래요</text>
+            <line x1="158" y1="111" x2="206" y2="111" style="stroke:var(--ink-faint)" stroke-width="2" marker-end="url(#p1a)"/>
+
+            <circle cx="238" cy="111" r="32" style="fill:var(--bg-elevated);stroke:var(--ink)" stroke-width="3"/>
+            <text class="lbl" x="238" y="116" text-anchor="middle">LLM</text>
+
+            <line x1="266" y1="95" x2="374" y2="60" style="stroke:var(--ink-faint)" stroke-width="1.6" stroke-dasharray="2 5" marker-end="url(#p1a)"/>
+            <rect x="376" y="42" width="96" height="36" rx="8" style="fill:var(--bg-elevated);stroke:var(--rail)" stroke-width="1.6"/>
+            <text class="lbl" x="424" y="65" text-anchor="middle" style="font-size:11.5px">주문 조회</text>
+
+            <line x1="270" y1="111" x2="374" y2="111" style="stroke:var(--ink-faint)" stroke-width="1.6" stroke-dasharray="2 5" marker-end="url(#p1a)"/>
+            <rect x="376" y="93" width="96" height="36" rx="8" style="fill:var(--bg-elevated);stroke:var(--rail)" stroke-width="1.6"/>
+            <text class="lbl" x="424" y="116" text-anchor="middle" style="font-size:11.5px">배송 조회</text>
+
+            <line x1="266" y1="128" x2="374" y2="164" style="stroke:var(--amber)" stroke-width="2.4" marker-end="url(#p1b)"/>
+            <rect x="376" y="146" width="96" height="36" rx="8" style="fill:var(--bg-elevated);stroke:var(--amber)" stroke-width="2.6"/>
+            <text class="lbl" x="424" y="169" text-anchor="middle" style="font-size:11.5px;fill:var(--amber)">교환/환불</text>
+          </svg>
+        </div>
+        <p class="body-text">같은 원리로 검색 기반 챗봇은 질문 성격에 따라 <b>구글 웹 검색</b>과 <b>사내 규정 검색</b> 중 무엇을 쓸지도 스스로 판단한다. 라우터 개념은 챕터 2의 ReAct 패턴(생각 → 행동 → 관찰)으로 그대로 확장된다 — ReAct는 라우터가 매 순간 어떤 기준으로 다음 행동을 고르는지를 단계별로 보여주는 구조다.</p>
+      </div>
+
+      <div class="manual">
+        <h3><span class="tag">1.4</span>두 가지 설계 방식 — 같은 목표, 다른 제어 수준</h3>
+        <p class="body-text">"보고서 작성 에이전트"라는 같은 목표도 <b>단계를 누가 정하느냐</b>에 따라 전혀 다른 구조가 된다.</p>
+        <div class="pair">
+          <figure>
+            <div class="diagram-wrap">
+              <svg viewBox="0 0 260 150" role="img" aria-label="목차 작성, 초안 작성, 문체 수정 순서가 고정된 보고서 작성 에이전트 다이어그램">
+                <defs><marker id="p2a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--ink-faint)"/></marker></defs>
+                <circle cx="30" cy="75" r="20" style="fill:var(--bg-elevated);stroke:var(--ink)" stroke-width="2.4"/>
+                <text class="lbl" x="30" y="72" text-anchor="middle" style="font-size:10px">라우터</text>
+                <text class="lbl" x="30" y="83" text-anchor="middle" style="font-size:10px">LLM</text>
+                <line x1="50" y1="75" x2="76" y2="35" style="stroke:var(--ink-faint)" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#p2a)"/>
+                <rect x="78" y="18" width="66" height="34" rx="7" style="fill:var(--bg-elevated-2);stroke:var(--rail)" stroke-width="1.6"/>
+                <text class="lbl" x="111" y="39" text-anchor="middle" style="font-size:10px">목차 작성</text>
+                <line x1="144" y1="35" x2="176" y2="60" style="stroke:var(--ink-faint)" stroke-width="1.8" marker-end="url(#p2a)"/>
+                <line x1="50" y1="75" x2="176" y2="75" style="stroke:var(--ink-faint)" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#p2a)"/>
+                <rect x="178" y="58" width="72" height="34" rx="7" style="fill:var(--bg-elevated-2);stroke:var(--rail)" stroke-width="1.6"/>
+                <text class="lbl" x="214" y="79" text-anchor="middle" style="font-size:9.5px">목차별 초안</text>
+                <line x1="214" y1="92" x2="214" y2="112" style="stroke:var(--ink-faint)" stroke-width="1.8" marker-end="url(#p2a)"/>
+                <rect x="178" y="114" width="72" height="30" rx="7" style="fill:var(--bg-elevated-2);stroke:var(--rail)" stroke-width="1.6"/>
+                <text class="lbl" x="214" y="133" text-anchor="middle" style="font-size:10px">문체 수정</text>
+                <text class="mono" x="130" y="14" text-anchor="middle">고정 단계</text>
+              </svg>
+            </div>
+            <figcaption>1.4.1 단계를 미리 지정 — 라우터는 "이미 목차가 있는지"만 판단하고 순서는 고정</figcaption>
+          </figure>
+          <figure>
+            <div class="diagram-wrap">
+              <svg viewBox="0 0 260 150" role="img" aria-label="하나의 LLM이 목차 작성, 초안 작성, 문체 수정을 자율적으로 오가며 선택하는 다이어그램">
+                <circle cx="130" cy="75" r="30" style="fill:var(--bg-elevated);stroke:var(--amber)" stroke-width="3"/>
+                <text class="lbl" x="130" y="72" text-anchor="middle" style="font-size:10.5px">단일</text>
+                <text class="lbl" x="130" y="84" text-anchor="middle" style="font-size:10.5px">LLM</text>
+                <line x1="130" y1="45" x2="130" y2="20" style="stroke:var(--amber)" stroke-width="1.8"/>
+                <rect x="82" y="6" width="96" height="16" rx="4" style="fill:none"/>
+                <text class="cap" x="130" y="12" text-anchor="middle" style="font-size:9.5px">알아서 판단</text>
+                <line x1="102" y1="75" x2="40" y2="45" style="stroke:var(--amber)" stroke-width="1.6"/>
+                <text class="cap" x="46" y="38" text-anchor="middle" style="font-size:9.5px">목차</text>
+                <line x1="102" y1="90" x2="40" y2="120" style="stroke:var(--amber)" stroke-width="1.6"/>
+                <text class="cap" x="46" y="132" text-anchor="middle" style="font-size:9.5px">초안</text>
+                <line x1="158" y1="82" x2="220" y2="108" style="stroke:var(--amber)" stroke-width="1.6"/>
+                <text class="cap" x="216" y="122" text-anchor="middle" style="font-size:9.5px">수정</text>
+                <text class="mono" x="130" y="145" text-anchor="middle">자율 루프</text>
+              </svg>
+            </div>
+            <figcaption>1.4.2 단일 LLM이 알아서 판단 — 초안을 쓰다 목차로 되돌아가는 등 유연하지만 예측은 어려움</figcaption>
+          </figure>
+        </div>
+        <p class="body-text" style="margin-top:14px;">1.4.1 구조의 핵심은 "목차가 이미 주어졌는가"만 판단하면 된다는 점이다 — 목차가 있으면 곧장 <b>목차별 초안 작성</b>으로, 없으면 <b>목차 생성</b>으로 라우팅되고, 이후 흐름은 고정이다. 반대로 1.4.2는 "당신은 주어진 능력을 사용해 알아서 보고서를 작성하는 에이전트입니다"라는 프롬프트 하나로 전체 순서까지 LLM에게 맡긴다.</p>
+        <div class="quote-box">
+          <p><b>더 알아보기 — 진정한 AI 에이전트란?</b></p>
+          <p class="en">"Rather than arguing over which work to include or exclude as being a true agent, we can acknowledge that there are different degrees to which systems can be agentic."</p>
+          <p>어떤 시스템을 "진짜 에이전트"로 인정할지 논쟁하기보다, 시스템마다 에이전트적 성격(agentic)을 갖는 정도가 다르다고 보는 편이 실용적이다.</p>
+          <footer>— Andrew Ng</footer>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 2 -->
+  <section aria-labelledby="ch2-h" id="ch2">
+    <div class="part-head">
+      <span class="num">CHAPTER 2</span>
+      <h2 id="ch2-h">AI 에이전트를 구성하는 3가지 핵심 요소</h2>
+      <span class="src">2.1 – 2.4</span>
+    </div>
+
+    <div class="stack">
+      <div class="manual">
+        <h3><span class="tag">2.1.1</span>추론 부품 ① — ReAct (생각 → 행동 → 관찰)</h3>
+        <p class="body-text">2022년 발표된 프롬프트 기법으로, Reasoning(추론)과 Acting(행동)의 합성어다. 문제 해결 순서를 <b>생각</b>하고, 그에 따라 <b>행동</b>하고, 결과를 <b>관찰</b>해 다시 생각하는 과정을 반복하며 최적의 답을 찾는다.</p>
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 400 300" role="img" aria-label="생각, 행동, 관찰이 삼각형으로 순환하는 ReAct 루프 다이어그램">
+            <defs><marker id="rA" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--violet)"/></marker></defs>
+            <line x1="219" y1="86" x2="301" y2="194" style="stroke:var(--violet)" stroke-width="3" marker-end="url(#rA)"/>
+            <line x1="288" y1="220" x2="112" y2="220" style="stroke:var(--violet)" stroke-width="3" marker-end="url(#rA)"/>
+            <line x1="99" y1="194" x2="181" y2="86" style="stroke:var(--violet)" stroke-width="3" marker-end="url(#rA)"/>
+            <circle cx="200" cy="60" r="34" style="fill:var(--bg-elevated);stroke:var(--violet)" stroke-width="3"/>
+            <text class="lbl" x="200" y="65" text-anchor="middle">생각</text>
+            <text class="mono" x="200" y="105" text-anchor="middle">Thought</text>
+            <circle cx="320" cy="222" r="34" style="fill:var(--bg-elevated);stroke:var(--violet)" stroke-width="3"/>
+            <text class="lbl" x="320" y="227" text-anchor="middle">행동</text>
+            <text class="mono" x="320" y="267" text-anchor="middle">Action</text>
+            <circle cx="80" cy="222" r="34" style="fill:var(--bg-elevated);stroke:var(--violet)" stroke-width="3"/>
+            <text class="lbl" x="80" y="227" text-anchor="middle">관찰</text>
+            <text class="mono" x="80" y="267" text-anchor="middle">Observation</text>
+          </svg>
+        </div>
+        <div class="qa-card">
+          <span class="label">예시 · 100만 행 CSV 매출 분석</span>
+          <div class="row q"><span class="tag">Q</span>sales.csv(date, product_id, price, quantity)에서 월별 총 매출과 매출 상위 3개 상품을 구해줘. 100만 행 이상도 메모리 효율적으로.</div>
+          <div class="row a"><span class="tag">A</span><b>생각</b>: 대용량이니 dtype 최적화·필요 컬럼만 로드해야 함 → <b>행동</b>: dtype·usecols 지정해 CSV 로드 → <b>관찰</b>: 로드 성공, 메모리 절약 확인 → <b>생각</b>: price×quantity로 매출 계산 후 groupby 집계 → <b>행동</b>: 월별/상품별 집계 코드 실행 → <b>관찰</b>: 결과 출력 확인 → <b>답</b>: 최적화된 코드와 결과 제시.</div>
+        </div>
+      </div>
+
+      <div class="manual">
+        <h3><span class="tag">2.1.2</span>추론 부품 ② — Reflection (반성을 통한 자기 개선)</h3>
+        <p class="body-text">답을 바로 내놓지 않고 "왜 그렇게 생각했는지" 근거를 설명하게 해 오류를 줄이는 기법이다. 초안을 만들고, 스스로(혹은 별도 평가 단계에서) 비평하고, 수정 지시를 반영해 다시 쓰는 과정을 목표를 달성할 때까지 반복한다.</p>
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 440 210" role="img" aria-label="초안 생성과 비평, 수정이 왕복하는 Reflection 루프 다이어그램">
+            <defs><marker id="rB" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--violet)"/></marker></defs>
+            <path d="M144,72 Q220,28 296,72" style="stroke:var(--violet)" stroke-width="2.6" fill="none" marker-end="url(#rB)"/>
+            <text class="cap" x="220" y="38" text-anchor="middle">초안 제출</text>
+            <path d="M296,104 Q220,148 144,104" style="stroke:var(--violet)" stroke-width="2.6" fill="none" marker-end="url(#rB)"/>
+            <text class="cap" x="220" y="150" text-anchor="middle">수정 지시</text>
+            <circle cx="110" cy="88" r="36" style="fill:var(--bg-elevated);stroke:var(--violet)" stroke-width="3"/>
+            <text class="lbl" x="110" y="84" text-anchor="middle" style="font-size:12.5px">초안</text>
+            <text class="lbl" x="110" y="98" text-anchor="middle" style="font-size:12.5px">생성</text>
+            <circle cx="330" cy="88" r="36" style="fill:var(--bg-elevated);stroke:var(--violet)" stroke-width="3"/>
+            <text class="lbl" x="330" y="84" text-anchor="middle" style="font-size:12.5px">비평·</text>
+            <text class="lbl" x="330" y="98" text-anchor="middle" style="font-size:12.5px">평가</text>
+            <line x1="330" y1="124" x2="330" y2="168" style="stroke:var(--ink-faint)" stroke-width="2" stroke-dasharray="3 5" marker-end="url(#rB)"/>
+            <text class="cap" x="330" y="192" text-anchor="middle">충분히 좋으면 → 최종 출력</text>
+          </svg>
+        </div>
+        <div class="qa-card">
+          <span class="label">예시 · 중복 제거 정렬 함수</span>
+          <div class="row q"><span class="tag">Q</span>리스트 중복을 제거하고 오름차순 정렬하는 함수를 작성해줘. 접근 방식, 고려한 점, 개선 가능성까지 근거로 설명해줘.</div>
+          <div class="row a"><span class="tag">A</span><code>return sorted(set(numbers))</code> — 접근: set으로 중복 제거 후 sorted() 정렬 / 고려: 원본 리스트 비변경, 빈 리스트도 안전 / 개선 가능성: 숫자 외 타입 검증 필요, 정렬 옵션 파라미터화 가능.</div>
+        </div>
+        <p class="body-text" style="margin-top:14px;">이렇게 답변 과정에 <b>검토·재평가 단계</b>를 명시적으로 포함시키면, 한 번의 실행으로 끝내는 대신 더 안정적인 결과를 유도할 수 있다.</p>
+      </div>
+
+      <div class="manual">
+        <h3><span class="tag">2.2</span>도구 호출 — LLM의 한계를 보완하다</h3>
+        <p class="body-text">LLM은 특정 시점까지 학습된 모델이라 최신 정보나 실시간 데이터에 접근할 수 없다. 이를 보완하기 위해 외부 <b>도구(tool)</b>를 사용하도록 하는 것이 도구 호출이다. LLM이 스스로 "이 도구가 필요하다"고 판단해 도구를 선택하고, 실행에 필요한 인자까지 생성한다 — 실제 실행과 결과 반환은 개발자가 시스템에 붙여준다.</p>
+        <div class="badge-pair">
+          <span>학습된 지식만 사용 가능</span>
+          <span class="on">도구로 능력 확장 (웹 검색·계산·DB 조회…)</span>
+        </div>
+        <p class="body-text" style="margin-top:14px;">도구가 2개 이상이면 "생각" 단계에서 <b>어떤 도구를 쓸지 판단하는 범위</b>가 넓어진다는 점이 다르다. 예를 들어 "오늘 날씨를 바탕으로 옷차림을 애니메이션 스타일로 그려줘"라는 요청에는 <b>웹 검색 도구</b>로 실시간 날씨를 가져온 뒤, 그 결과를 바탕으로 <b>이미지 생성 도구</b>를 다시 호출하는 2단계 ReAct 루프가 필요하다.</p>
+        <p class="body-text">도구가 반드시 외부 API일 필요는 없다 — 내부 규칙에 따른 처리 로직이나 사전 정의된 함수도 도구로 추상화해 사용할 수 있다.</p>
+      </div>
+
+      <div class="manual">
+        <h3><span class="tag">2.3</span>메모리 — 대화 맥락과 사용자 이력을 기억하다</h3>
+        <p class="body-text">에이전트가 자연스럽게 상호작용하려면 지금 대화의 흐름뿐 아니라 사용자의 성향까지 기억할 수 있어야 한다. 챗GPT가 "지금까지 나눈 대화를 바탕으로 내 성격을 추측해봐"라는 요청에 답할 수 있는 것도 메모리 덕분이다.</p>
+        <div class="table-wrap">
+          <table class="compare">
+            <thead><tr><th>구분</th><th>단기 메모리</th><th>장기 메모리</th></tr></thead>
+            <tbody>
+              <tr><td class="k">범위</td><td>현재 하나의 채팅(세션) 안</td><td>여러 채팅에 걸쳐 누적</td></tr>
+              <tr><td class="k">역할</td><td>대화 흐름·주제를 잊지 않고 유지</td><td>과거 경험·성향에 기반한 맞춤 응답</td></tr>
+              <tr><td class="k">필요 시점</td><td>연속 대화에 대한 피드백을 주고받을 때</td><td>사용자 취향을 반영하거나 과거 이력이 현재 작업에 영향을 줄 때</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="manual">
+        <h3><span class="tag">2.4</span>종합 — ReAct 기반 LLM 에이전트</h3>
+        <p class="body-text">추론(ReAct 루프) 안에서 필요할 때마다 도구를 호출하고, 메모리로 대화 맥락을 유지하는 형태로 세 부품이 하나의 에이전트에 결합된다. ReAct 패턴은 가장 기본적이고 유용한 형태로, 챕터 6에서 이를 기반으로 싱글 에이전트를 직접 구현한다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 3 -->
+  <section aria-labelledby="ch3-h" id="ch3">
+    <div class="part-head">
+      <span class="num">CHAPTER 3</span>
+      <h2 id="ch3-h">목적에 따른 에이전트 아키텍처 설계 기준</h2>
+      <span class="src">3.1 – 3.3</span>
+    </div>
+
+    <div class="stack">
+      <div class="manual">
+        <h3><span class="tag">3.1</span>싱글 에이전트 — 하나의 주체가 판단부터 실행까지</h3>
+        <p class="body-text">싱글 에이전트는 하나의 에이전트가 독립적으로 모든 추론과 행동을 수행하는 구조다. 여러 도구를 갖더라도 판단 주체가 분리되지 않는다는 점이 핵심 — 기획·의사결정·실행을 모두 스스로 담당하는 개인 사업자에 비유할 수 있다.</p>
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 500 300" role="img" aria-label="에이전트 하나가 이동 수단 조사, 숙소 비교, 관광지 조사, 예산 체크 네 가지 도구와 방사형으로 연결된 여행 에이전트 다이어그램">
+            <defs><marker id="hubA" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--teal)"/></marker></defs>
+            <line x1="240" y1="68" x2="240" y2="130" style="stroke:var(--teal)" stroke-width="2.2" marker-start="url(#hubA)" marker-end="url(#hubA)"/>
+            <line x1="145" y1="155" x2="190" y2="155" style="stroke:var(--teal)" stroke-width="2.2" marker-start="url(#hubA)" marker-end="url(#hubA)"/>
+            <line x1="290" y1="155" x2="335" y2="155" style="stroke:var(--teal)" stroke-width="2.2" marker-start="url(#hubA)" marker-end="url(#hubA)"/>
+            <line x1="240" y1="180" x2="240" y2="242" style="stroke:var(--teal)" stroke-width="2.2" marker-start="url(#hubA)" marker-end="url(#hubA)"/>
+            <ellipse cx="240" cy="40" rx="76" ry="27" style="fill:var(--bg-elevated);stroke:var(--teal)" stroke-width="2.4"/>
+            <text class="lbl" x="240" y="45" text-anchor="middle" style="font-size:11px">이동 수단 조사</text>
+            <ellipse cx="80" cy="155" rx="76" ry="27" style="fill:var(--bg-elevated);stroke:var(--teal)" stroke-width="2.4"/>
+            <text class="lbl" x="80" y="160" text-anchor="middle" style="font-size:11px">숙소 비교 정리</text>
+            <ellipse cx="420" cy="155" rx="76" ry="27" style="fill:var(--bg-elevated);stroke:var(--teal)" stroke-width="2.4"/>
+            <text class="lbl" x="420" y="160" text-anchor="middle" style="font-size:11px">지역별 관광지 조사</text>
+            <ellipse cx="240" cy="270" rx="76" ry="27" style="fill:var(--bg-elevated);stroke:var(--teal)" stroke-width="2.4"/>
+            <text class="lbl" x="240" y="275" text-anchor="middle" style="font-size:11px">예산·조건 체크</text>
+            <rect x="190" y="130" width="100" height="50" rx="10" style="fill:var(--bg-elevated);stroke:var(--ink)" stroke-width="3"/>
+            <text class="lbl" x="240" y="160" text-anchor="middle">에이전트</text>
+          </svg>
+        </div>
+        <p class="body-text">이 구조의 핵심은 <b>하나의 판단 주체가 여러 능력을 통합적으로 활용</b>한다는 것 — 여러 도구를 오가더라도 판단이 흩어지지 않는다. 업무 자동화 에이전트(계획 수립 → 데이터 가공·작업 수행·알림 전송)도 같은 원리다: 판단이 명시적으로 먼저 오고 실행이 뒤따르는 싱글 에이전트의 또 다른 형태다.</p>
+      </div>
+
+      <div class="manual">
+        <h3><span class="tag">3.2</span>멀티 에이전트 — 판단이 여러 곳으로 분산된다</h3>
+        <p class="body-text">멀티 에이전트는 여러 에이전트가 각자의 판단을 수행하며 상호작용하는 구조다. 싱글 에이전트를 단순히 여러 개 나열한다고 멀티 에이전트가 되는 것이 아니라, <b>에이전트 간 의사결정과 정보 교환이 발생하는가</b>가 핵심이다.</p>
+        <div class="table-wrap">
+          <table class="compare">
+            <thead><tr><th>구분</th><th>싱글 에이전트</th><th>멀티 에이전트</th></tr></thead>
+            <tbody>
+              <tr><td class="k">작업 주체</td><td>하나의 에이전트</td><td>여러 에이전트</td></tr>
+              <tr><td class="k">작업 구조</td><td>공통 목적을 하나가 모두 수행</td><td>공통 목적을 역할별 하위 목적으로 분담</td></tr>
+              <tr><td class="k">정보 처리</td><td>모든 정보를 하나가 종합</td><td>각자 맡은 부분만, 필요시 서로 전달</td></tr>
+              <tr><td class="k">확장 방식</td><td>내부 로직·도구를 확장</td><td>새 에이전트를 추가</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="body-text" style="margin-top:14px;">작업이 복잡해질수록 싱글 에이전트는 고려할 정보량이 급격히 늘어 판단의 일관성이 흔들리기 쉽다. 멀티 에이전트는 이 부담을 나눠 맡기는 대신, 소통 비용(정보 누락·왜곡 방지)이라는 새로운 과제를 떠안는다.</p>
+      </div>
+
+      <div class="manual">
+        <h3><span class="tag">3.3</span>어떤 에이전트를 설계해야 할까</h3>
+        <p class="body-text">에이전트 설계에 절대적인 정답은 없다. 다음 두 기준으로 먼저 판단해보자.</p>
+        <div class="diagram-wrap">
+          <svg viewBox="0 0 480 250" role="img" aria-label="역할이 여러 개고 서로 상충하는지에 따라 싱글 또는 멀티 에이전트로 갈라지는 결정 다이어그램">
+            <defs><marker id="fA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--ink-faint)"/></marker></defs>
+            <rect x="170" y="10" width="140" height="42" rx="8" style="fill:var(--bg-elevated);stroke:var(--rail)" stroke-width="2"/>
+            <text class="lbl" x="240" y="36" text-anchor="middle" style="font-size:12px">요구사항 분석</text>
+            <line x1="240" y1="52" x2="240" y2="72" style="stroke:var(--ink-faint)" stroke-width="2" marker-end="url(#fA)"/>
+            <polygon points="240,72 320,122 240,172 160,122" style="fill:var(--bg-elevated);stroke:var(--amber)" stroke-width="2.6"/>
+            <text class="lbl" x="240" y="115" text-anchor="middle" style="font-size:11px">목적이 하나이고</text>
+            <text class="lbl" x="240" y="130" text-anchor="middle" style="font-size:11px">판단이 한 흐름인가?</text>
+            <line x1="168" y1="128" x2="110" y2="180" style="stroke:var(--ink-faint)" stroke-width="2" marker-end="url(#fA)"/>
+            <text class="cap" x="150" y="163" text-anchor="middle">Yes</text>
+            <rect x="30" y="182" width="150" height="44" rx="8" style="fill:var(--bg-elevated);stroke:var(--teal)" stroke-width="2.6"/>
+            <text class="lbl" x="105" y="209" text-anchor="middle" style="font-size:12px">싱글 에이전트</text>
+            <line x1="312" y1="128" x2="372" y2="180" style="stroke:var(--ink-faint)" stroke-width="2" marker-end="url(#fA)"/>
+            <text class="cap" x="333" y="163" text-anchor="middle">No</text>
+            <rect x="298" y="182" width="150" height="44" rx="8" style="fill:var(--bg-elevated);stroke:var(--violet)" stroke-width="2.6"/>
+            <text class="lbl" x="373" y="209" text-anchor="middle" style="font-size:12px">멀티 에이전트</text>
+          </svg>
+        </div>
+
+        <h3 style="margin-top:24px;"><span class="tag">3.3.1</span>싱글 에이전트로 충분한 경우</h3>
+        <ul class="pt">
+          <li><b>웹 검색 기반 질의응답</b> (챗GPT, 퍼플렉시티) — 검색 필요 여부 판단 → 쿼리 생성 → 검색 → 문서 요약 → 답변까지, "실제 웹 정보로 답한다"는 목적 하나로 이어진다.</li>
+          <li><b>파일 관리 에이전트</b> (깃허브 코파일럿) — 파일 생성·수정·삭제·복구를 판단할 때 이전 버전과의 차이, 다른 작업에 미치는 영향을 하나의 맥락으로 관리해야 해서 판단이 분산되면 오히려 불안정하다.</li>
+        </ul>
+        <p class="body-text" style="margin-top:10px;"><b>판단 기준</b>: 목적이 하나로 명확하고 · 판단이 하나의 흐름으로 이어지며 · 전체 맥락을 한 곳에서 유지하는 것이 중요하다면 싱글 에이전트가 자연스럽다.</p>
+
+        <h3 style="margin-top:24px;"><span class="tag">3.3.2</span>멀티 에이전트가 필요한 경우</h3>
+        <ul class="pt">
+          <li><b>자료 조사 + 보고서 작성</b> (릴리스AI류) — 자료 조사 에이전트는 폭넓고 신뢰할 정보 수집에, 보고서 작성 에이전트는 주어진 정보로 문서를 완성하는 데만 집중한다. 판단 기준이 다른 두 역할을 하나에 맡기면 어느 한쪽이 흔들린다.</li>
+          <li><b>풀스택 코딩 에이전트</b> (figma make류) — 프런트엔드(사용자 인터랙션)·백엔드(데이터·API)·디자인(시각적 일관성) 에이전트가 각자 특화된 기준으로 판단하고, 결과를 합쳐 하나의 서비스를 만든다. 실제 개발 조직의 팀 협업과 유사한 구조다.</li>
+        </ul>
+        <p class="body-text" style="margin-top:10px;">멀티 에이전트로 갈수록 <b>역할 분리 뿐 아니라 정보 전달 범위와 소통 경계</b>까지 함께 설계해야 한다 — 이 설계 원칙이 7장의 네트워크·슈퍼바이저·계층형 패턴으로 이어진다.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="page">
+    <span>『만들면서 배우는 AI 에이전트 개발 입문+실전』 Chapter 1–3 이론 정리 · 조립편(Ch 4–6)은 별도 파일</span>
+    <span class="mono">Part 01</span>
+  </footer>
+
+</div>

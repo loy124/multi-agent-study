@@ -17,6 +17,7 @@
     --line-supervisor:#B4650A;
     --line-hierarchy:#5B3FC4;
     --accent: var(--line-supervisor);
+    --code-bg:#1B1E29; --code-ink:#E7E9F2;
     --shadow: 0 1px 2px rgba(20,22,30,0.04), 0 8px 24px -12px rgba(20,22,30,0.16);
     --font-display:'Gothic A1','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
     --font-body:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
@@ -36,6 +37,7 @@
       --line-network:#4CD9CE;
       --line-supervisor:#F2A94A;
       --line-hierarchy:#B7A0FC;
+      --code-bg:#0D0E13; --code-ink:#DCE0F0;
       --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -14px rgba(0,0,0,0.6);
     }
   }
@@ -190,6 +192,17 @@
 
   .stack{ display:grid; gap:22px; }
 
+  /* code block */
+  .code-block{ background:var(--code-bg); color:var(--code-ink); border-radius:12px; padding:16px 18px; margin-top:14px; overflow-x:auto; }
+  .code-block pre{ margin:0; font-family:var(--font-mono); font-size:0.82rem; line-height:1.6; white-space:pre; }
+  .compare-mini{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px; }
+  .compare-mini .box{ background:var(--bg-elevated-2); border-radius:12px; padding:16px 18px; }
+  .compare-mini .box h4{ font-size:0.95rem; font-weight:700; margin:0 0 8px; font-family:var(--font-display); }
+  .compare-mini .box p{ font-size:0.86rem; color:var(--ink-soft); margin:0; }
+  .compare-mini .box.a{ border-top:3px solid var(--line-hierarchy); }
+  .compare-mini .box.b{ border-top:3px solid var(--line-supervisor); }
+  @media (max-width:620px){ .compare-mini{ grid-template-columns:1fr; } }
+
   /* comparison table */
   .table-wrap{ overflow-x:auto; background:var(--bg-elevated); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow); }
   table.compare{ width:100%; border-collapse:collapse; min-width:640px; font-size:0.9rem; }
@@ -308,7 +321,8 @@
       <a href="#supervisor"><span class="dot supervisor"></span>슈퍼바이저선</a>
       <a href="#hierarchy"><span class="dot hierarchy"></span>계층선</a>
       <a href="#custom"><span class="dot custom"></span>커스텀 연장선</a>
-      <a href="#upcoming"><span class="dot" style="border:2px solid var(--rail);background:transparent"></span>Phase 2–6 예정</a>
+      <a href="#phase2"><span class="dot" style="background:var(--ink)"></span>Phase 2 · 핸드오프</a>
+      <a href="#upcoming"><span class="dot" style="border:2px solid var(--rail);background:transparent"></span>Phase 3–6 예정</a>
     </nav>
   </header>
 
@@ -735,26 +749,143 @@
     </div>
   </section>
 
+  <section aria-labelledby="phase2-h" id="phase2" style="margin-top:56px;">
+    <div class="section-head">
+      <div class="kicker">7.2.1 – 7.2.2 · Phase 2 상세</div>
+      <h2 id="phase2-h">환승 게이트 — Command로 핸드오프 제어하기</h2>
+    </div>
+
+    <div class="panel">
+      <h3>핸드오프란?</h3>
+      <p style="color:var(--ink-soft);font-size:0.95rem;">한 에이전트가 다른 에이전트에게 <b>제어권과 필요한 정보를 함께</b> 넘기는 멀티 에이전트 간 상호작용 방식이다. 랭그래프에서는 <code style="font-family:var(--font-mono);background:var(--rail-soft);padding:1px 5px;border-radius:4px;">Command</code> 객체로 이를 직접 제어한다 — 조건부 엣지와 다른 점은 <b>그래프의 상태를 업데이트하면서 동시에 다음 노드로 이동</b>할 수 있다는 것. 하나의 에이전트가 다른 에이전트에게 작업을 넘기면서 결과 메시지도 함께 전달해야 할 때 특히 유용하다.</p>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <h3>7.2.1 노드의 이동 경로 제어하기</h3>
+      <p style="color:var(--ink-soft);font-size:0.95rem;">두 개의 노드를 만들고, Command로 이동 경로와 상태 전달을 함께 제어해본다.</p>
+      <div class="code-block"><pre>from typing import Literal
+from langgraph.types import Command
+from langgraph.graph import StateGraph, MessagesState, START, END
+from langchain_core.messages import AIMessage
+
+def agent_1(state: MessagesState) -&gt; Command[Literal["agent_2"]]:
+    messages = AIMessage(content="1번 에이전트 메시지입니다.")
+    return Command(
+        goto="agent_2",
+        update={"messages": [messages]}
+    )
+
+def agent_2(state: MessagesState) -&gt; Command[Literal[END]]:
+    message = AIMessage(content="2번 에이전트 메시지입니다.")
+    return Command(
+        goto=END,
+        update={"messages": [message]},
+    )
+
+graph_builder = StateGraph(MessagesState)
+graph_builder.add_node("agent_1", agent_1)
+graph_builder.add_node("agent_2", agent_2)
+graph_builder.add_edge(START, "agent_1")
+graph = graph_builder.compile()</pre></div>
+      <p style="margin-top:12px;color:var(--ink-soft);font-size:0.95rem;">노드 함수 안에서 이미 <code style="font-family:var(--font-mono);background:var(--rail-soft);padding:1px 5px;border-radius:4px;">goto</code>로 다음 경로를 지정했기 때문에 <code style="font-family:var(--font-mono);background:var(--rail-soft);padding:1px 5px;border-radius:4px;">add_edge</code>를 따로 추가할 필요가 없다 — 시작 엣지(<code style="font-family:var(--font-mono);background:var(--rail-soft);padding:1px 5px;border-radius:4px;">START → agent_1</code>) 하나만 있으면 된다. 그래프를 시각화하면 <code style="font-family:var(--font-mono);background:var(--rail-soft);padding:1px 5px;border-radius:4px;">add_edge</code>로 만든 구간만 실선으로, Command가 동적으로 결정하는 구간은 점선으로 표시된다.</p>
+      <div class="diagram-wrap" style="margin-top:16px;">
+        <svg viewBox="0 0 380 120" role="img" aria-label="START에서 agent_1로 실선, agent_1에서 agent_2로 점선, agent_2에서 END로 점선으로 이어지는 Command 기반 그래프">
+          <defs>
+            <marker id="cmdA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--ink)"/></marker>
+          </defs>
+          <circle cx="30" cy="60" r="18" style="fill:var(--bg-elevated);stroke:var(--ink)" stroke-width="2.4"/>
+          <text class="station-code" x="30" y="64" text-anchor="middle" style="fill:var(--ink);font-size:9px">START</text>
+          <line x1="48" y1="60" x2="94" y2="60" style="stroke:var(--ink)" stroke-width="2.2" marker-end="url(#cmdA)"/>
+
+          <rect x="96" y="36" width="88" height="48" rx="9" style="fill:var(--bg-elevated);stroke:var(--ink)" stroke-width="2.6"/>
+          <text class="station-label" x="140" y="64" text-anchor="middle">agent_1</text>
+          <line x1="184" y1="60" x2="230" y2="60" style="stroke:var(--ink-faint)" stroke-width="2.2" stroke-dasharray="2 5" marker-end="url(#cmdA)"/>
+          <text class="note" x="207" y="46" text-anchor="middle">Command</text>
+
+          <rect x="232" y="36" width="88" height="48" rx="9" style="fill:var(--bg-elevated);stroke:var(--ink)" stroke-width="2.6"/>
+          <text class="station-label" x="276" y="64" text-anchor="middle">agent_2</text>
+          <line x1="320" y1="60" x2="346" y2="60" style="stroke:var(--ink-faint)" stroke-width="2.2" stroke-dasharray="2 5" marker-end="url(#cmdA)"/>
+
+          <circle cx="360" cy="60" r="16" style="fill:var(--bg-elevated);stroke:var(--ink)" stroke-width="2.4"/>
+          <text class="station-code" x="360" y="64" text-anchor="middle" style="fill:var(--ink);font-size:9px">END</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <h3>7.2.2 조건에 따른 Command 사용법</h3>
+      <p style="color:var(--ink-soft);font-size:0.95rem;">멀티 에이전트 구조에서는 각 에이전트의 동적인 판단에 따라 다음 경로가 달라진다. 상태값 <code style="font-family:var(--font-mono);background:var(--rail-soft);padding:1px 5px;border-radius:4px;">foo</code>에 따라 agent_1이 agent_2 또는 agent_3 중 하나로 핸드오프하는 예시다.</p>
+      <div class="code-block"><pre>class State(MessagesState):
+    foo: str
+
+def agent_1(state: State) -&gt; Command[Literal["agent_2", "agent_3"]]:
+    messages = AIMessage(content="1번 에이전트 메시지입니다.")
+    if state["foo"] == "bar":
+        return Command(
+            goto="agent_3",
+            update={"messages": [messages], "foo": "baz"}
+        )
+    return Command(
+        goto="agent_2",
+        update={"messages": [messages]}
+    )</pre></div>
+      <p style="margin-top:12px;color:var(--ink-soft);font-size:0.95rem;"><code style="font-family:var(--font-mono);background:var(--rail-soft);padding:1px 5px;border-radius:4px;">foo</code>가 <code style="font-family:var(--font-mono);background:var(--rail-soft);padding:1px 5px;border-radius:4px;">"bar"</code>면 agent_3으로 이동하며 <code style="font-family:var(--font-mono);background:var(--rail-soft);padding:1px 5px;border-radius:4px;">foo</code>를 <code style="font-family:var(--font-mono);background:var(--rail-soft);padding:1px 5px;border-radius:4px;">"baz"</code>로 갱신하고, 그렇지 않으면 agent_2로 이동한다 — <b>경로 결정과 상태 업데이트를 한 번에</b> 처리하는 것이 핵심이다.</p>
+      <div class="compare-mini">
+        <div class="box a">
+          <h4>조건부 엣지</h4>
+          <p><code style="font-family:var(--font-mono)">add_conditional_edges</code>로 별도 엣지를 그래프에 추가해야 하며, 라우팅 함수는 <b>다음 노드 이름만</b> 반환한다.</p>
+        </div>
+        <div class="box b">
+          <h4>Command</h4>
+          <p>노드 함수 안에서 <code style="font-family:var(--font-mono)">goto</code>(경로)와 <code style="font-family:var(--font-mono)">update</code>(상태)를 <b>동시에</b> 반환 — 별도 엣지 추가가 필요 없다.</p>
+        </div>
+      </div>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 420 220" role="img" aria-label="agent_1이 상태값에 따라 agent_2 또는 agent_3으로 점선 분기하고 각각 END로 이어지는 다이어그램">
+          <defs>
+            <marker id="cmdB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--ink-faint)"/></marker>
+            <marker id="cmdA-2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--ink)"/></marker>
+          </defs>
+          <circle cx="210" cy="22" r="16" style="fill:var(--bg-elevated);stroke:var(--ink)" stroke-width="2.4"/>
+          <text class="station-code" x="210" y="26" text-anchor="middle" style="fill:var(--ink);font-size:9px">START</text>
+          <line x1="210" y1="38" x2="210" y2="58" style="stroke:var(--ink)" stroke-width="2.2" marker-end="url(#cmdA-2)"/>
+
+          <rect x="164" y="60" width="92" height="46" rx="9" style="fill:var(--bg-elevated);stroke:var(--ink)" stroke-width="2.6"/>
+          <text class="station-label" x="210" y="88" text-anchor="middle">agent_1</text>
+
+          <line x1="176" y1="106" x2="110" y2="146" style="stroke:var(--ink-faint)" stroke-width="2.2" stroke-dasharray="2 5" marker-end="url(#cmdB)"/>
+          <text class="note" x="130" y="128" text-anchor="middle">foo != bar</text>
+          <rect x="60" y="148" width="100" height="42" rx="8" style="fill:var(--bg-elevated);stroke:var(--ink)" stroke-width="2.2"/>
+          <text class="station-label" x="110" y="174" text-anchor="middle" style="font-size:12px">agent_2</text>
+          <line x1="110" y1="190" x2="110" y2="208" style="stroke:var(--ink-faint)" stroke-width="2" stroke-dasharray="2 5" marker-end="url(#cmdB)"/>
+
+          <line x1="244" y1="106" x2="310" y2="146" style="stroke:var(--ink-faint)" stroke-width="2.2" stroke-dasharray="2 5" marker-end="url(#cmdB)"/>
+          <text class="note" x="292" y="128" text-anchor="middle">foo == bar</text>
+          <rect x="260" y="148" width="100" height="42" rx="8" style="fill:var(--bg-elevated);stroke:var(--ink)" stroke-width="2.2"/>
+          <text class="station-label" x="310" y="174" text-anchor="middle" style="font-size:12px">agent_3</text>
+          <line x1="310" y1="190" x2="310" y2="208" style="stroke:var(--ink-faint)" stroke-width="2" stroke-dasharray="2 5" marker-end="url(#cmdB)"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="table-wrap" style="border-radius:16px; margin-top:16px;">
+      <div style="padding:20px 28px 0;">
+        <h2 style="font-size:1.05rem;font-weight:700;">체크포인트 안내판 · Phase 2</h2>
+      </div>
+      <div class="signboard" style="margin-top:16px;">
+        <div class="kicker">Self Check</div>
+        <h3>Command가 조건부 엣지보다 나은 지점은?</h3>
+        <p>조건부 엣지는 <strong>"다음에 어디로 갈지"</strong>만 정할 수 있다. 반면 <strong>Command</strong>는 다음 경로를 정함과 동시에 <strong>상태값을 함께 갱신</strong>할 수 있다 — 그래서 한 에이전트가 다른 에이전트에게 작업을 넘기면서 "지금까지의 결과 메시지"도 같이 넘겨야 하는 멀티 에이전트 핸드오프에 훨씬 자연스럽게 들어맞는다. 7.3절부터는 이 Command가 실제 에이전트 간 핸드오프 도구로 쓰인다.</p>
+      </div>
+    </div>
+  </section>
+
   <section aria-labelledby="upcoming-h" id="upcoming" style="margin-top:56px;">
     <div class="section-head">
-      <div class="kicker">7.2 – 7.6 · 미개통 구간</div>
-      <h2 id="upcoming-h">다음 정거장들 — Phase 2 ~ 6 미리보기</h2>
+      <div class="kicker">7.3 – 7.6 · 미개통 구간</div>
+      <h2 id="upcoming-h">다음 정거장들 — Phase 3 ~ 6 미리보기</h2>
     </div>
     <div class="preview-grid">
-
-      <div class="preview-card wide">
-        <div class="top-row">
-          <span class="ptag">PHASE 2 · 7.2</span>
-          <span class="status pending">다음 정거장</span>
-        </div>
-        <h4>핸드오프를 위한 기능 살펴보기</h4>
-        <span class="pattern-tag">핸드오프 기초</span>
-        <ul>
-          <li>7.2.1 핸드오프 개념과 <code style="font-family:var(--font-mono)">Command</code> 사용법 익히기</li>
-          <li>7.2.2 조건에 따른 <code style="font-family:var(--font-mono)">Command</code> 사용법 알아보기</li>
-        </ul>
-        <p class="cp"><b>체크포인트</b> — 한 노드에서 Command로 다음 노드와 상태 업데이트를 동시에 지정하는 최소 예제가 동작한다.</p>
-      </div>
 
       <div class="preview-card">
         <div class="top-row">
@@ -821,7 +952,7 @@
 
   <footer>
     <span>『만들면서 배우는 AI 에이전트 개발 입문+실전』 7장 — <span class="mono">plan.md</span> · <span class="mono">notes.md</span> 기반 학습 정리</span>
-    <span class="mono">Phase 0–1 완료 / Phase 2 진행 예정</span>
+    <span class="mono">Phase 0–2 이론 정리 완료 / Phase 3 실습 예정</span>
   </footer>
 
 </div>

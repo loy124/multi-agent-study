@@ -120,6 +120,12 @@
 
   .stack{ display:grid; gap:16px; }
 
+  .checkpoint{ border-radius:14px; border-top:4px solid var(--amber); background:var(--bg-elevated-2); padding:20px 22px 22px; box-shadow:var(--shadow); }
+  .checkpoint .k{ font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.1em; color:var(--amber); text-transform:uppercase; margin-bottom:8px; font-weight:600; }
+  .checkpoint h4{ font-size:1rem; font-weight:700; margin-bottom:10px; }
+  .checkpoint p{ font-size:0.9rem; color:var(--ink-soft); }
+  .checkpoint strong{ color:var(--ink); }
+
   footer.page{ margin-top:80px; padding-top:24px; border-top:1px solid var(--rail-soft); color:var(--ink-faint); font-size:0.82rem; display:flex; flex-wrap:wrap; gap:8px 20px; justify-content:space-between; }
   footer.page .mono{ font-family:var(--font-mono); }
 
@@ -129,10 +135,11 @@
 <div class="wrap">
 
   <header class="hero">
+    <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:0.78rem;color:var(--ink-faint);text-decoration:none;margin-bottom:14px;">← 학습 허브로</a>
     <div class="eyebrow">Chapter 4 – 6 상세 · 만들면서 배우는 AI 에이전트 개발</div>
     <h1>에이전트 조립 설명서 · 조립편</h1>
     <p class="lede">부품편에서 다룬 LLM 판단·추론·도구·메모리를 실제로 조립하는 편. 개발 환경을 준비하고, 랭그래프의 State·Node·Edge·조건부 엣지로 흐름을 설계한 뒤, 첫 완성품인 싱글 에이전트를 만든다.</p>
-    <div class="part-switch"><span>부품편 · Ch 1–3</span><span class="on">조립편 · Ch 4–6</span></div>
+    <div class="part-switch"><a href="study-guide-fundamentals-part1.html" style="text-decoration:none;color:inherit;"><span>부품편 · Ch 1–3</span></a><span class="on">조립편 · Ch 4–6</span></div>
     <nav class="toc" aria-label="챕터 바로가기">
       <a href="#ch4"><span class="chip" style="background:var(--ink-faint)">4</span>개발 환경</a>
       <a href="#ch5"><span class="chip" style="background:var(--violet)">5</span>랭그래프</a>
@@ -157,7 +164,7 @@
       </dl>
       <div class="toolbox-note">
         <span class="icon">0</span>
-        <p>이 프로젝트에서는 같은 내용을 <b>Phase 0</b>로 이미 체크했다 — 가상환경·패키지 설치는 완료, API 키 등록만 남은 상태다. <span style="color:var(--ink-faint)">(체크리스트는 <code>study-guide.html</code>의 Phase 0 참고)</span></p>
+        <p>이 프로젝트에서는 같은 내용을 <b>Phase 0</b>로 이미 체크했다 — 가상환경·패키지 설치는 완료, API 키 등록만 남은 상태다. <span style="color:var(--ink-faint)">(체크리스트는 <a href="study-guide.html#phase0" style="color:inherit;text-decoration:underline;">study-guide.html의 Phase 0</a> 참고)</span></p>
       </div>
     </div>
   </section>
@@ -293,6 +300,12 @@ graph.add_conditional_edges(
         <h3><span class="tag">5.3</span>랭그래프로 에이전트 설계하고 구현하기</h3>
         <p class="body-text">지금까지의 요소로 실제 챗봇 그래프를 만든다. 입력 스키마(<code>question</code>)와 출력 스키마(<code>answer</code>)를 상태 전체 스키마(<code>messages</code>)와 다르게 정의할 수도 있다 — 입력·출력에는 최소한의 키만 노출하고, 내부 상태는 더 풍부하게 관리하는 식이다. 이 그래프가 챕터 6 싱글 에이전트 구현의 뼈대가 된다.</p>
       </div>
+
+      <div class="checkpoint">
+        <span class="k">Chapter 5 체크포인트</span>
+        <h4>조건부 엣지와 Command, 뭐가 다른지 한 문장으로?</h4>
+        <p>조건부 엣지(<code>add_conditional_edges</code>)는 <strong>다음 노드 이름만</strong> 정할 수 있다. 반면 <a href="study-guide.html#phase2" style="color:inherit;text-decoration:underline;">7장 Phase 2</a>에서 다룰 <code>Command</code>는 <strong>다음 노드 + 상태 업데이트를 동시에</strong> 처리한다 — 이 차이를 설명할 수 있으면 5장 통과.</p>
+      </div>
     </div>
   </section>
 
@@ -356,11 +369,17 @@ graph.add_conditional_edges(
         </div>
         <p class="body-text">이렇게 완성된 ReAct 기반 싱글 에이전트가 7장 멀티 에이전트의 <b>구성 단위</b>가 된다 — 네트워크·슈퍼바이저 패턴 모두 결국 이런 싱글 에이전트 여러 개를 어떻게 연결하느냐의 문제다.</p>
       </div>
+
+      <div class="checkpoint">
+        <span class="k">Chapter 6 체크포인트</span>
+        <h4><code>create_agent</code>에 들어가는 3가지 재료를 말할 수 있는가?</h4>
+        <p><strong>model</strong>(어떤 LLM을 쓸지), <strong>tools</strong>(어떤 도구를 쓸 수 있는지), <strong>prompt</strong>(어떤 역할·규칙으로 판단할지) — 이 세 가지를 넣으면 내부적으로 ReAct 루프가 도는 에이전트 그래프가 자동으로 만들어진다는 것까지 설명할 수 있으면 6장, 그리고 부품편·조립편 전체를 다 통과한 것이다.</p>
+      </div>
     </div>
   </section>
 
   <footer class="page">
-    <span>『만들면서 배우는 AI 에이전트 개발 입문+실전』 Chapter 4–6 이론 정리 · 부품편(Ch 1–3)은 별도 파일</span>
+    <span>『만들면서 배우는 AI 에이전트 개발 입문+실전』 Chapter 4–6 이론 정리 · <a href="study-guide-fundamentals-part1.html" style="color:inherit;">← 부품편(Ch 1–3)</a> · <a href="study-guide.html" style="color:inherit;">7장 노선도 →</a> · <a href="index.html" style="color:inherit;">학습 허브</a></span>
     <span class="mono">Part 02</span>
   </footer>
 

@@ -1,5 +1,7 @@
 # 학습 노트
 
+> 챕터 1~7 전체를 다이어그램·코드 예시와 함께 정리한 HTML 자료는 `index.html`(학습 지도)부터 시작 — 부품편(Ch1-3) → 조립편(Ch4-6) → 노선도(Ch7) 순.
+
 ## Phase 1 (7.1) 멀티 에이전트 4가지 패턴
 
 핵심 질문: **"누가 다음에 실행할 노드를 결정하는가?"**
@@ -39,3 +41,12 @@
 - `.venv` 생성, `langgraph`(1.2.11) `langchain-openai` `langchain-tavily` `python-dotenv` 설치 완료.
 - `.env.example` / `.gitignore` / `requirements.txt` 작성 완료.
 - API 키(OPENAI_API_KEY, TAVILY_API_KEY)는 사용자가 `.env`에 직접 채워야 함.
+
+---
+
+## Phase 2 (7.2) 핸드오프 — Command (이론 정리 완료, 실습은 아직)
+
+- 조건부 엣지와의 차이: 조건부 엣지는 **다음 노드 이름만** 결정하지만, `Command`는 **다음 노드 + 상태 업데이트를 동시에** 반환한다.
+- 최소 예제: `Command(goto="agent_2", update={"messages": [...]})` — `add_edge`는 시작 엣지(`START → agent_1`)만 있으면 되고, 나머지 이동은 노드 함수 안에서 Command로 처리.
+- 조건부 Command: 노드 함수 리턴 타입에 `Command[Literal["agent_2", "agent_3"]]`처럼 갈 수 있는 노드를 명시하고, 함수 내부 `if`문으로 상태값에 따라 다른 `goto`를 반환.
+- 실제로 손으로 코드를 쳐보는 실습(`phase2_handoff_basics/`)은 아직 안 함 — 이론만 정리된 상태. 자세한 코드는 `study-guide.html`의 Phase 2 섹션 참고.

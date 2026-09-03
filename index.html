@@ -1,0 +1,192 @@
+<title>에이전트 학습 지도</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700;900&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F5F8; --bg-elevated:#FFFFFF; --bg-elevated-2:#EBEDF2;
+    --ink:#1B1E29; --ink-soft:#565C70; --ink-faint:#8A90A3;
+    --rail:#CBCFD9; --rail-soft:#E3E5EC; --border: rgba(27,30,41,0.11);
+    --teal:#0C7A7A; --amber:#B4650A; --violet:#5B3FC4; --accent: var(--amber);
+    --shadow: 0 1px 2px rgba(20,22,30,0.04), 0 8px 24px -12px rgba(20,22,30,0.16);
+    --font-display:'Gothic A1','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    --font-body:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    --font-mono:'IBM Plex Mono','D2Coding',ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#13151D; --bg-elevated:#1B1E29; --bg-elevated-2:#232733;
+      --ink:#E7E9F2; --ink-soft:#AEB3C4; --ink-faint:#7C8296;
+      --rail:#3B404F; --rail-soft:#282C39; --border: rgba(231,233,242,0.13);
+      --teal:#4CD9CE; --amber:#F2A94A; --violet:#B7A0FC;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -14px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#13151D; --bg-elevated:#1B1E29; --bg-elevated-2:#232733;
+    --ink:#E7E9F2; --ink-soft:#AEB3C4; --ink-faint:#7C8296;
+    --rail:#3B404F; --rail-soft:#282C39; --border: rgba(231,233,242,0.13);
+    --teal:#4CD9CE; --amber:#F2A94A; --violet:#B7A0FC;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 28px -14px rgba(0,0,0,0.6);
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background: radial-gradient(circle, var(--rail-soft) 1px, transparent 1.4px) 0 0/24px 24px, var(--bg);
+    color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.7; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{ font-family:var(--font-display); text-wrap:balance; margin:0; }
+  p{ margin:0; }
+  a{ color:inherit; }
+  ::selection{ background:var(--amber); color:#1B1E29; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:4px; }
+  code{ font-family:var(--font-mono); background:var(--rail-soft); padding:1px 5px; border-radius:4px; font-size:0.85em; color:var(--ink); }
+
+  .wrap{ max-width:880px; margin:0 auto; padding:0 20px 100px; }
+
+  header.hero{ padding:60px 0 8px; }
+  .eyebrow{ display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.12em; color:var(--ink-faint); text-transform:uppercase; margin-bottom:18px; }
+  .eyebrow::before{ content:""; width:16px; height:2px; background:var(--amber); display:inline-block; }
+  h1{ font-weight:900; font-size:clamp(2rem, 3.6vw + 1rem, 3rem); letter-spacing:-0.01em; }
+  .lede{ margin-top:16px; max-width:60ch; color:var(--ink-soft); font-size:1.05rem; }
+
+  .panel{ background:var(--bg-elevated); border:1px solid var(--border); border-radius:16px; padding:24px 26px; box-shadow:var(--shadow); }
+  .panel + .panel{ margin-top:14px; }
+  .panel h3{ font-size:1rem; font-weight:700; margin-bottom:10px; }
+  .panel p{ font-size:0.92rem; color:var(--ink-soft); }
+  .panel p + p{ margin-top:8px; }
+
+  .section-head{ margin:56px 0 20px; }
+  .section-head .kicker{ font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.1em; color:var(--ink-faint); text-transform:uppercase; margin-bottom:6px; }
+  .section-head h2{ font-size:1.3rem; font-weight:700; }
+
+  .route{ display:grid; gap:14px; }
+  .route-card{
+    display:flex; gap:18px; align-items:flex-start;
+    background:var(--bg-elevated); border:1px solid var(--border); border-radius:16px;
+    padding:22px 24px; box-shadow:var(--shadow); text-decoration:none; color:inherit;
+    transition:transform .12s ease;
+  }
+  .route-card:hover{ transform:translateY(-2px); }
+  .route-card .num{
+    flex:none; width:40px; height:40px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono); font-weight:700; font-size:1rem; color:#fff;
+  }
+  .route-card:nth-of-type(1) .num{ background:var(--violet); }
+  .route-card:nth-of-type(2) .num{ background:var(--teal); }
+  .route-card:nth-of-type(3) .num{ background:var(--amber); }
+  .route-card h3{ font-size:1.1rem; font-weight:700; }
+  .route-card .en{ font-family:var(--font-mono); font-size:0.72rem; color:var(--ink-faint); letter-spacing:0.04em; margin-top:2px; }
+  .route-card p.desc{ margin-top:8px; font-size:0.9rem; color:var(--ink-soft); }
+  .route-card .tags{ margin-top:10px; display:flex; flex-wrap:wrap; gap:6px; }
+  .route-card .tags span{ font-size:0.72rem; padding:3px 9px; border-radius:999px; background:var(--bg-elevated-2); color:var(--ink-faint); }
+  .route-card .go{ margin-left:auto; flex:none; font-family:var(--font-mono); font-size:0.78rem; color:var(--ink-faint); align-self:center; }
+
+  .scope-list{ list-style:none; margin:10px 0 0; padding:0; display:grid; gap:8px; }
+  .scope-list li{ display:flex; gap:10px; font-size:0.88rem; }
+  .scope-list .mark{ flex:none; width:20px; height:20px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; margin-top:1px; }
+  .scope-list .mark.in{ background:var(--ink); color:var(--bg-elevated); }
+  .scope-list .mark.out{ border:1.5px solid var(--rail); color:var(--ink-faint); }
+  .scope-list span.txt{ color:var(--ink-soft); }
+  .scope-list b{ color:var(--ink); }
+
+  .status-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+  .status-row span{ font-family:var(--font-mono); font-size:0.75rem; padding:6px 12px; border-radius:999px; border:1px solid var(--border); color:var(--ink-soft); }
+  .status-row span.done{ background:var(--ink); color:var(--bg-elevated); border-color:var(--ink); }
+
+  footer.page{ margin-top:70px; padding-top:24px; border-top:1px solid var(--rail-soft); color:var(--ink-faint); font-size:0.82rem; display:flex; flex-wrap:wrap; gap:8px 20px; justify-content:space-between; }
+  footer.page .mono{ font-family:var(--font-mono); }
+
+  @media (max-width:560px){
+    header.hero{ padding-top:44px; }
+    .route-card{ flex-direction:column; }
+    .route-card .go{ margin-left:0; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Study Map · 만들면서 배우는 AI 에이전트 개발</div>
+    <h1>에이전트 학습 지도</h1>
+    <p class="lede">AI 에이전트를 처음 접한다는 전제로 정리한 세 개의 학습 자료. 아래 순서대로 읽으면 챕터 1~7을 처음부터 끝까지 따라갈 수 있다.</p>
+  </header>
+
+  <section aria-labelledby="prereq-h">
+    <div class="section-head" style="margin-top:32px;">
+      <div class="kicker">Before You Start</div>
+      <h2 id="prereq-h">시작하기 전에</h2>
+    </div>
+    <div class="panel">
+      <h3>필요한 선수지식</h3>
+      <p><b>파이썬 기초 문법을 읽을 수 있는 정도</b>면 충분하다 — 변수, 함수, 클래스 정의 정도를 알아보면 된다. LLM API(OpenAI 등)를 한 번도 안 써봤어도 괜찮다 — 1장부터 "LLM이 뭘 할 수 있는지"부터 차근차근 설명한다.</p>
+      <p>단, 이 자료는 <b>읽기용 정리</b>다. 책 스스로도 강조하듯 "예제 코드는 반드시 직접 실행해보세요 — 읽는 것만으로는 에이전트의 동작과 한계를 체감하기 어렵습니다." 개념은 이 자료로 잡고, Phase 2(핸드오프)부터는 직접 코드를 쳐보는 것을 권한다.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="route-h">
+    <div class="section-head">
+      <div class="kicker">Reading Order</div>
+      <h2 id="route-h">읽는 순서 — 3부작</h2>
+    </div>
+    <div class="route">
+      <a class="route-card" href="study-guide-fundamentals-part1.html">
+        <span class="num">1</span>
+        <div>
+          <h3>에이전트 조립 설명서 · 부품편</h3>
+          <div class="en">CHAPTER 1 – 3</div>
+          <p class="desc">LLM은 어떻게 판단하는가, 에이전트를 이루는 3대 부품(추론·도구·메모리), 싱글 vs 멀티 설계 기준.</p>
+          <div class="tags"><span>라우터</span><span>ReAct</span><span>Reflection</span><span>메모리</span></div>
+        </div>
+        <span class="go">읽기 →</span>
+      </a>
+      <a class="route-card" href="study-guide-fundamentals-part2.html">
+        <span class="num">2</span>
+        <div>
+          <h3>에이전트 조립 설명서 · 조립편</h3>
+          <div class="en">CHAPTER 4 – 6</div>
+          <p class="desc">개발 환경 준비, 랭그래프의 State·Node·Edge·조건부 엣지, create_agent로 싱글 에이전트 조립하기.</p>
+          <div class="tags"><span>랭그래프</span><span>State/Node/Edge</span><span>create_agent</span><span>RAG</span></div>
+        </div>
+        <span class="go">읽기 →</span>
+      </a>
+      <a class="route-card" href="study-guide.html">
+        <span class="num">3</span>
+        <div>
+          <h3>멀티 에이전트 노선도</h3>
+          <div class="en">CHAPTER 7</div>
+          <p class="desc">네트워크·슈퍼바이저·계층형 패턴, 그리고 Command로 핸드오프를 직접 제어하는 법까지.</p>
+          <div class="tags"><span>네트워크 패턴</span><span>슈퍼바이저 패턴</span><span>Command 핸드오프</span></div>
+        </div>
+        <span class="go">읽기 →</span>
+      </a>
+    </div>
+    <div class="status-row">
+      <span class="done">Phase 0 완료</span>
+      <span class="done">Phase 1 완료</span>
+      <span class="done">Phase 2 이론 정리 완료</span>
+      <span>Phase 3–6 실습 예정</span>
+    </div>
+  </section>
+
+  <section aria-labelledby="scope-h">
+    <div class="section-head">
+      <div class="kicker">Scope</div>
+      <h2 id="scope-h">이 자료가 다루는 범위</h2>
+    </div>
+    <div class="panel">
+      <ul class="scope-list">
+        <li><span class="mark in">✓</span><span class="txt"><b>Chapter 1–7</b> (Part 01–03 일부) — LLM 의사결정부터 멀티 에이전트 구현까지, 이번 학습 계획(<code>plan.md</code>)이 목표로 하는 범위</span></li>
+        <li><span class="mark out"></span><span class="txt"><b>Chapter 8</b> (메모리 설계·개인화 구현) — 범위 밖, 필요해지면 이어서 정리 가능</span></li>
+        <li><span class="mark out"></span><span class="txt"><b>Chapter 9–10</b> (MCP·A2A 프로토콜) — 범위 밖, 멀티 에이전트를 외부 도구·다른 시스템과 연동하는 심화 주제</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="page">
+    <span>『만들면서 배우는 AI 에이전트 개발 입문+실전』 학습 정리 · <span class="mono">plan.md</span> · <span class="mono">notes.md</span></span>
+    <span class="mono">3부작 · Ch 1–7</span>
+  </footer>
+
+</div>
